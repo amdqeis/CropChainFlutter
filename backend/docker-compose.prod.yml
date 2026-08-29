@@ -1,0 +1,109 @@
+services:
+  migrate:
+    build: .
+    restart: "no"
+    env_file: [.env]
+    environment: &app-env
+      APP_ENV: production
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      REDIS_URL: redis://redis:6379/0
+    command: alembic upgrade head
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    build: .
+    restart: unless-stopped
+    env_file: [.env]
+    environment: *app-env
+    volumes:
+      - media_data:/app/media
+      - private_media_data:/app/.private_media
+      - model_data:/app/media/models
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2 --proxy-headers
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  worker:
+    build: .
+    restart: unless-stopped
+    env_file: [.env]
+    environment: *app-env
+    volumes:
+      - media_data:/app/media
+      - private_media_data:/app/.private_media
+      - model_data:/app/media/models
+    command: celery -A app.worker.celery_app worker --loglevel=INFO
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  scheduler:
+    build: .
+    restart: unless-stopped
+    env_file: [.env]
+    environment: *app-env
+    command: celery -A app.worker.celery_app beat --loglevel=INFO
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  postgres_data:
+  redis_data:
+  media_data:
+  private_media_data:
+  model_data:
+  caddy_data:
+  caddy_config:
