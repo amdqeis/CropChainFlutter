@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/theme/app_theme.dart';
+
+const String _kLogoSvg = 'assets/images/cropchain_logo.svg';
 
 /// ─────────────────────────────────────────────
 /// SPLASH PAGE (Loading + Logo only)
@@ -28,7 +31,6 @@ class _SplashLoadingPageState extends State<SplashLoadingPage>
     _fadeAnim = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
     _controller.forward();
 
-    // Navigate to splash after 2 seconds
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/splash');
@@ -48,8 +50,9 @@ class _SplashLoadingPageState extends State<SplashLoadingPage>
       backgroundColor: AppColors.white,
       body: FadeTransition(
         opacity: _fadeAnim,
-        child: const Center(
-          child: _CropChainLogoColored(),
+        child: Center(
+          // Logo SVG asli Figma (includes icon + "CROPCHAIN" text)
+          child: SvgPicture.asset(_kLogoSvg, height: 110),
         ),
       ),
     );
@@ -116,25 +119,14 @@ class _SplashPageState extends State<SplashPage> {
                 // Logo in center
                 Expanded(
                   child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: 80,
-                          height: 80,
-                          child: CustomPaint(painter: _WhiteLogoPainter()),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'CROPCHAIN',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 3,
-                          ),
-                        ),
-                      ],
+                    child: SvgPicture.asset(
+                      _kLogoSvg,
+                      height: 120,
+                      // Warnakan putih semua path agar kontras di atas background gelap
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),
@@ -201,166 +193,4 @@ class _SplashPageState extends State<SplashPage> {
       ),
     );
   }
-}
-
-// ─── Logo Widgets ────────────────────────────
-
-class _CropChainLogoColored extends StatelessWidget {
-  const _CropChainLogoColored();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-          width: 80,
-          height: 80,
-          child: CustomPaint(
-            painter: _ColoredLogoPainter(),
-          ),
-        ),
-        const SizedBox(height: 12),
-        const Text(
-          'CROPCHAIN',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-            color: AppColors.textPrimary,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _WhiteLogoPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    _drawLogo(canvas, size, Colors.white);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-class _ColoredLogoPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Draw primary leaves in dark green
-    _drawLogo(canvas, size, const Color(0xFF3D6834),
-        secondaryColor: const Color(0xFF4A9B8E)); // teal for bottom leaves
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-void _drawLogo(Canvas canvas, Size size, Color color,
-    {Color? secondaryColor}) {
-  final paint = Paint()
-    ..color = color
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 2.5
-    ..strokeCap = StrokeCap.round;
-
-  final w = size.width;
-  final h = size.height;
-  final cx = w / 2;
-  final cy = h / 2;
-
-  canvas.drawCircle(Offset(cx, cy + h * 0.05), h * 0.18, paint);
-
-  final topLeafPath = Path()
-    ..moveTo(cx, cy - h * 0.1)
-    ..quadraticBezierTo(cx - w * 0.1, cy - h * 0.35, cx, cy - h * 0.45)
-    ..quadraticBezierTo(cx + w * 0.1, cy - h * 0.35, cx, cy - h * 0.1);
-  canvas.drawPath(topLeafPath, paint);
-
-  final leftLeafPath = Path()
-    ..moveTo(cx - w * 0.08, cy)
-    ..quadraticBezierTo(cx - w * 0.35, cy - h * 0.12, cx - w * 0.42, cy)
-    ..quadraticBezierTo(cx - w * 0.35, cy + h * 0.12, cx - w * 0.08, cy);
-  canvas.drawPath(leftLeafPath, paint);
-
-  final rightLeafPath = Path()
-    ..moveTo(cx + w * 0.08, cy)
-    ..quadraticBezierTo(cx + w * 0.35, cy - h * 0.12, cx + w * 0.42, cy)
-    ..quadraticBezierTo(cx + w * 0.35, cy + h * 0.12, cx + w * 0.08, cy);
-  canvas.drawPath(rightLeafPath, paint);
-
-  if (secondaryColor != null) {
-    paint.color = secondaryColor;
-  }
-
-  final blLeafPath = Path()
-    ..moveTo(cx - w * 0.05, cy + h * 0.15)
-    ..quadraticBezierTo(
-        cx - w * 0.28, cy + h * 0.28, cx - w * 0.22, cy + h * 0.45)
-    ..quadraticBezierTo(
-        cx - w * 0.08, cy + h * 0.28, cx - w * 0.05, cy + h * 0.15);
-  canvas.drawPath(blLeafPath, paint);
-
-  final brLeafPath = Path()
-    ..moveTo(cx + w * 0.05, cy + h * 0.15)
-    ..quadraticBezierTo(
-        cx + w * 0.28, cy + h * 0.28, cx + w * 0.22, cy + h * 0.45)
-    ..quadraticBezierTo(
-        cx + w * 0.08, cy + h * 0.28, cx + w * 0.05, cy + h * 0.15);
-  canvas.drawPath(brLeafPath, paint);
-}
-
-/// Reusable CropChain logo (for backward compat with register_page)
-class CropChainLogo extends StatelessWidget {
-  final bool dark;
-  final double iconSize;
-  final double fontSize;
-
-  const CropChainLogo({
-    super.key,
-    this.dark = false,
-    this.iconSize = 48,
-    this.fontSize = 18,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final color = dark ? Colors.white : AppColors.primaryGreen;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-          width: iconSize,
-          height: iconSize,
-          child: CustomPaint(
-            painter: _DarkLogoPainter(color: color),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'CROPCHAIN',
-          style: TextStyle(
-            color: color,
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _DarkLogoPainter extends CustomPainter {
-  final Color color;
-  const _DarkLogoPainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    _drawLogo(canvas, size, color);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

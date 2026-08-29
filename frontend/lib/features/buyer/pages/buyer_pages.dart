@@ -23,6 +23,27 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
     const _MenuData(icon: Icons.local_offer_outlined, label: 'Promo'),
   ];
 
+  static const _popularProducts = [
+    _ProductData(
+      name: 'Tomat Segar',
+      price: 'Rp 12.000/kg',
+      imageUrl:
+          'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=300&q=80',
+    ),
+    _ProductData(
+      name: 'Cabai Merah',
+      price: 'Rp 35.000/kg',
+      imageUrl:
+          'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=300&q=80',
+    ),
+    _ProductData(
+      name: 'Bayam Organik',
+      price: 'Rp 8.000/ikat',
+      imageUrl:
+          'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=300&q=80',
+    ),
+  ];
+
   void _navigate(int index) {
     setState(() => _currentNavIndex = index);
     switch (index) {
@@ -76,26 +97,63 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
             ),
             const SizedBox(height: 16),
 
-            // Banner / Hero image placeholder
+            // Banner / Hero image
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/buyer/shop'),
-              child: Container(
-                height: 160,
-                decoration: BoxDecoration(
-                  color: AppColors.lightGreenBg2,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.borderColor),
-                ),
-                child: Stack(
-                  children: [
-                    const Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: EdgeInsets.all(14),
-                        child: _ShopNowButton(),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: SizedBox(
+                  height: 180,
+                  width: double.infinity,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.network(
+                        'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&q=80',
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          color: AppColors.lightGreenBg2,
+                          child: const Center(
+                            child: Icon(Icons.image_not_supported_outlined,
+                                color: AppColors.textHint, size: 40),
+                          ),
+                        ),
+                        loadingBuilder: (_, child, progress) {
+                          if (progress == null) return child;
+                          return Container(
+                            color: AppColors.lightGreenBg2,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.primaryGreen,
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                  ],
+                      // Dark gradient overlay for readability
+                      Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.transparent,
+                              Color(0x88000000),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Shop Now button
+                      const Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                          padding: EdgeInsets.all(14),
+                          child: _ShopNowButton(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -155,14 +213,14 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
             ),
             const SizedBox(height: 12),
             SizedBox(
-              height: 120,
+              height: 170,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                itemCount: _popularProducts.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 12),
                 itemBuilder: (context, i) => GestureDetector(
                   onTap: () => Navigator.pushNamed(context, '/buyer/product-detail'),
-                  child: const ProductImagePlaceholder(size: 110),
+                  child: _PopularProductCard(product: _popularProducts[i]),
                 ),
               ),
             ),
@@ -210,6 +268,106 @@ class _ShopNowButton extends StatelessWidget {
       ),
     );
   }
+}
+
+// ─────────────────────────────────────────────
+// POPULAR PRODUCT CARD (Buyer Home)
+// ─────────────────────────────────────────────
+class _PopularProductCard extends StatelessWidget {
+  final _ProductData product;
+  const _PopularProductCard({required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 120,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.borderColor),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(12)),
+            child: Image.network(
+              product.imageUrl,
+              width: 120,
+              height: 100,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                width: 120,
+                height: 100,
+                color: AppColors.lightGreenBg2,
+                child: const Icon(Icons.image_not_supported_outlined,
+                    color: AppColors.textHint, size: 24),
+              ),
+              loadingBuilder: (_, child, progress) {
+                if (progress == null) return child;
+                return Container(
+                  width: 120,
+                  height: 100,
+                  color: AppColors.lightGreenBg2,
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                        strokeWidth: 2, color: AppColors.primaryGreen),
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.name,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  product.price,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryGreen,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Data class untuk menu item
+class _MenuData {
+  final IconData icon;
+  final String label;
+  const _MenuData({required this.icon, required this.label});
+}
+
+// Data class untuk produk populer
+class _ProductData {
+  final String name;
+  final String price;
+  final String imageUrl;
+  const _ProductData({
+    required this.name,
+    required this.price,
+    required this.imageUrl,
+  });
 }
 
 // ─────────────────────────────────────────────

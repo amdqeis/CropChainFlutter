@@ -1,7 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'splash_page.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../../core/widgets/shared_widgets.dart';
 
 
 /// Screen: Login Page
@@ -123,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           // Logo
-                          CropChainLogo(dark: true, iconSize: 44, fontSize: 14),
+                          CropChainLogo(dark: true, iconSize: 80),
                           const SizedBox(height: 24),
 
                           // Title

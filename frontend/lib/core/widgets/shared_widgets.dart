@@ -1,42 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../theme/app_theme.dart';
+
+const String _kLogoAsset = 'assets/images/cropchain_logo.svg';
 
 /// ─────────────────────────────────────────────
 /// CropChain Logo Widget (used in splash & auth)
 /// ─────────────────────────────────────────────
 class CropChainLogo extends StatelessWidget {
   final bool dark;
+  /// [iconSize] kini mengontrol tinggi SVG; lebar otomatis sesuai rasio 250:130
   final double iconSize;
-  final double fontSize;
 
   const CropChainLogo({
     super.key,
     this.dark = false,
-    this.iconSize = 48,
-    this.fontSize = 16,
+    this.iconSize = 100,
+    // fontSize tidak digunakan lagi — teks sudah di dalam SVG
+    @Deprecated('teks sudah di dalam SVG') double fontSize = 16,
   });
 
   @override
   Widget build(BuildContext context) {
-    final color = dark ? Colors.white : AppColors.primaryGreen;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CustomPaint(
-          size: Size(iconSize, iconSize),
-          painter: _CropChainIconPainter(color: color),
+    // SVG sudah mencakup icon + teks "CROPCHAIN"
+    // dark=true → gunakan ColorFilter putih (untuk latar gelap)
+    return SvgPicture.asset(
+      _kLogoAsset,
+      height: iconSize,
+      colorFilter: dark
+          ? const ColorFilter.mode(Colors.white, BlendMode.srcIn)
+          : null,
+      placeholderBuilder: (_) => SizedBox(
+        height: iconSize,
+        width: iconSize * (250 / 130),
+        child: const CircularProgressIndicator(
+          strokeWidth: 2,
+          color: AppColors.primaryGreen,
         ),
-        const SizedBox(height: 6),
-        Text(
-          'CROPCHAIN',
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.bold,
-            color: color,
-            letterSpacing: 2,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -290,23 +291,10 @@ class CropChainAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.white,
       elevation: 0,
       automaticallyImplyLeading: false,
-      title: Row(
-        children: [
-          CustomPaint(
-            size: const Size(28, 28),
-            painter: _CropChainIconPainter(color: AppColors.primaryGreen),
-          ),
-          const SizedBox(width: 8),
-          const Text(
-            'CROPCHAIN',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primaryGreen,
-              letterSpacing: 1.5,
-            ),
-          ),
-        ],
+      title: SvgPicture.asset(
+        _kLogoAsset,
+        height: 32,
+        // SVG rasio 250:130 → lebar otomatis ~61px pada height 32
       ),
       actions: showNotification ? const [NotificationBell()] : null,
     );

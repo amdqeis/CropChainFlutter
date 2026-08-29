@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
-import 'splash_page.dart';
+import '../../../core/widgets/shared_widgets.dart';
+
 
 /// Screen: Register Form Page
 /// Referensi: Screenshot 5 (glassmorphism: E-mail, Username, Password, Confirm password + Konfirm btn)
@@ -76,7 +77,7 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Logo
-                    CropChainLogo(dark: true, iconSize: 40, fontSize: 14),
+                    CropChainLogo(dark: true, iconSize: 80),
                     const SizedBox(height: 24),
                     // E-mail
                     _GlassTextField(
@@ -213,7 +214,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Logo
-                    CropChainLogo(dark: true, iconSize: 36, fontSize: 13),
+                    CropChainLogo(dark: true, iconSize: 80),
                     const SizedBox(height: 20),
                     const Text(
                       'Verification Code',

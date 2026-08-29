@@ -17,6 +17,38 @@ class DistributorHomePage extends StatefulWidget {
 class _DistributorHomePageState extends State<DistributorHomePage> {
   int _currentNavIndex = 0;
 
+  static const _recentFarmerOffers = [
+    {
+      'farmer': 'Pak Budi Santoso',
+      'commodity': 'Cabai Merah Keriting',
+      'amount': '500 kg — Rp 30.000/kg',
+      'status': 'Baru',
+    },
+    {
+      'farmer': 'Bu Siti Rahayu',
+      'commodity': 'Tomat Cherry',
+      'amount': '200 kg — Rp 18.000/kg',
+      'status': 'Baru',
+    },
+  ];
+
+  static const _recentOrders = [
+    {
+      'id': '#ORD-2026-001',
+      'product': 'Cabai Merah Keriting',
+      'buyer': 'Ahmad Fauzi',
+      'total': 'Rp 150.000',
+      'status': 'Diproses',
+    },
+    {
+      'id': '#ORD-2026-002',
+      'product': 'Tomat Cherry',
+      'buyer': 'Dewi Kusuma',
+      'total': 'Rp 90.000',
+      'status': 'Dikirim',
+    },
+  ];
+
   void _onNavTap(int index) {
     setState(() => _currentNavIndex = index);
     switch (index) {
@@ -136,13 +168,24 @@ class _DistributorHomePageState extends State<DistributorHomePage> {
             ),
             const SizedBox(height: 20),
 
-            // Banner area
-            Container(
-              height: 160,
-              decoration: BoxDecoration(
-                color: AppColors.lightGreenBg2,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.borderColor),
+            // Tawaran Terbaru dari Petani
+            const Text(
+              'Tawaran Terbaru',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: AppColors.accentOrange,
+              ),
+            ),
+            const SizedBox(height: 10),
+            ..._recentFarmerOffers.map(
+              (o) => _DistributorOfferPreviewCard(
+                farmerName: o['farmer']!,
+                commodity: o['commodity']!,
+                amount: o['amount']!,
+                status: o['status']!,
+                onTap: () => Navigator.pushNamed(
+                    context, '/distributor/farmer-offer-detail'),
               ),
             ),
             const SizedBox(height: 20),
@@ -196,17 +239,43 @@ class _DistributorHomePageState extends State<DistributorHomePage> {
             ),
             const SizedBox(height: 20),
 
-            // Recent orders placeholder
-            Container(
-              height: 120,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE8E8E8),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Center(
-                child: Text('Pesanan Terbaru',
-                    style:
-                        TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+            // Pesanan Masuk Terbaru
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Pesanan Masuk Terbaru',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.accentOrange,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () =>
+                      Navigator.pushNamed(context, '/distributor/orders'),
+                  child: const Row(
+                    children: [
+                      Text('Lihat Semua',
+                          style: TextStyle(
+                              fontSize: 12, color: AppColors.textSecondary)),
+                      Icon(Icons.chevron_right,
+                          size: 16, color: AppColors.textSecondary),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ..._recentOrders.map(
+              (o) => _DistributorRecentOrderCard(
+                orderId: o['id']!,
+                product: o['product']!,
+                buyer: o['buyer']!,
+                total: o['total']!,
+                status: o['status']!,
+                onTap: () =>
+                    Navigator.pushNamed(context, '/distributor/order-detail'),
               ),
             ),
           ],
@@ -220,6 +289,168 @@ class _DistributorHomePageState extends State<DistributorHomePage> {
           BottomNavItem(icon: Icons.person_outline, activeIcon: Icons.person, label: 'Profile'),
         ],
         onTap: _onNavTap,
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// DISTRIBUTOR HOME — Offer Preview Card
+// ─────────────────────────────────────────────
+class _DistributorOfferPreviewCard extends StatelessWidget {
+  final String farmerName;
+  final String commodity;
+  final String amount;
+  final String status;
+  final VoidCallback onTap;
+
+  const _DistributorOfferPreviewCard({
+    required this.farmerName,
+    required this.commodity,
+    required this.amount,
+    required this.status,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.borderColor),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppColors.lightGreenBg,
+                borderRadius: BorderRadius.circular(22),
+              ),
+              child: const Icon(Icons.agriculture_outlined,
+                  color: AppColors.primaryGreen, size: 22),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    farmerName,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    commodity,
+                    style: const TextStyle(
+                        fontSize: 12, color: AppColors.textSecondary),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    amount,
+                    style: const TextStyle(
+                        fontSize: 11, color: AppColors.primaryGreen),
+                  ),
+                ],
+              ),
+            ),
+            StatusBadge.fromStatus(status),
+            const SizedBox(width: 4),
+            const Icon(Icons.chevron_right,
+                size: 18, color: AppColors.textSecondary),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// DISTRIBUTOR HOME — Recent Order Card
+// ─────────────────────────────────────────────
+class _DistributorRecentOrderCard extends StatelessWidget {
+  final String orderId;
+  final String product;
+  final String buyer;
+  final String total;
+  final String status;
+  final VoidCallback onTap;
+
+  const _DistributorRecentOrderCard({
+    required this.orderId,
+    required this.product,
+    required this.buyer,
+    required this.total,
+    required this.status,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.borderColor),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: AppColors.lightGreenBg,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.shopping_bag_outlined,
+                  color: AppColors.primaryGreen, size: 22),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    orderId,
+                    style: const TextStyle(
+                        fontSize: 11, color: AppColors.textSecondary),
+                  ),
+                  Text(
+                    product,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  Text(
+                    'Pembeli: $buyer  •  $total',
+                    style: const TextStyle(
+                        fontSize: 11, color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+            ),
+            StatusBadge.fromStatus(status),
+            const SizedBox(width: 4),
+            const Icon(Icons.chevron_right,
+                size: 18, color: AppColors.textSecondary),
+          ],
+        ),
       ),
     );
   }
