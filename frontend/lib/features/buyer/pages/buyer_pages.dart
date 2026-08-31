@@ -2370,12 +2370,3 @@ class _ProfileMenuItem extends StatelessWidget {
     );
   }
 }
-
-// ─────────────────────────────────────────────
-// MENU DATA HELPER
-// ─────────────────────────────────────────────
-class _MenuData {
-  final IconData icon;
-  final String label;
-  const _MenuData({required this.icon, required this.label});
-}

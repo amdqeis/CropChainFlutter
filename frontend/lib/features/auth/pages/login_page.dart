@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/shared_widgets.dart';
 
 
@@ -49,55 +48,16 @@ class _LoginPageState extends State<LoginPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Background — warm farm gradient simulating the photo background
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF8B7355), // warm brown/amber top
-                  Color(0xFF6B8F4E), // olive green mid
-                  Color(0xFF4A6F3A), // dark green bottom
-                  Color(0xFF3D8B5A), // forest green
-                ],
-                stops: [0.0, 0.35, 0.65, 1.0],
-              ),
-            ),
-          ),
-
-          // Subtle texture overlay — diffused light effect
-          Container(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: const Alignment(0.3, -0.3),
-                radius: 0.8,
-                colors: [
-                  Colors.amber.withValues(alpha: 0.25),
-                  Colors.transparent,
-                ],
-              ),
-            ),
-          ),
-
-          // Bottom green light leak
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: 300,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    Colors.green.withValues(alpha: 0.3),
-                  ],
-                ),
-              ),
-            ),
+          // Background — foto asli login_bg.jpg
+          // Figma: image 1564×877 di-offset x=-973 pada frame 402px
+          // Efek: bagian kanan foto (petani sunrise) yang terlihat
+          Image.asset(
+            'assets/images/login_bg.jpg',
+            fit: BoxFit.cover,
+            // alignment kustom: shift ke kanan agar bagian yg terlihat
+            // sama seperti di Figma (offset -973 dari total width 1564,
+            // center point image di ~0.24 dari kiri frame)
+            alignment: const Alignment(0.65, 0.0),
           ),
 
           // Glass card centered

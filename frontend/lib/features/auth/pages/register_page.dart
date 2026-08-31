@@ -44,21 +44,13 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Background gradient (farm field with warm tones)
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFD4C890),
-                  Color(0xFFA8BF96),
-                  Color(0xFF6B8F5A),
-                ],
-              ),
-            ),
+          // Background — foto asli register_bg.jpg
+          // Figma: image 1564×877 dengan offset x=-973 pada frame 402px
+          Image.asset(
+            'assets/images/register_bg.jpg',
+            fit: BoxFit.cover,
+            alignment: const Alignment(0.65, 0.0),
           ),
-          Container(color: Colors.black.withValues(alpha: 0.2)),
           // Centered glassmorphism card
           Center(
             child: SingleChildScrollView(
@@ -181,21 +173,12 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Background
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFD4C890),
-                  Color(0xFFA8BF96),
-                  Color(0xFF6B8F5A),
-                ],
-              ),
-            ),
+          // Background — foto asli register_bg.jpg
+          Image.asset(
+            'assets/images/register_bg.jpg',
+            fit: BoxFit.cover,
+            alignment: const Alignment(0.65, 0.0),
           ),
-          Container(color: Colors.black.withValues(alpha: 0.2)),
           // Glass card
           Center(
             child: Padding(

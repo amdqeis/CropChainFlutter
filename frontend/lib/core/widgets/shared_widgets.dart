@@ -42,51 +42,6 @@ class CropChainLogo extends StatelessWidget {
   }
 }
 
-class _CropChainIconPainter extends CustomPainter {
-  final Color color;
-  _CropChainIconPainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * 0.07
-      ..strokeCap = StrokeCap.round;
-
-    final cx = size.width / 2;
-    final cy = size.height / 2;
-    final r = size.width * 0.38;
-
-    // Draw stylized leaf/plant icon
-    // Center circle
-    canvas.drawCircle(Offset(cx, cy + r * 0.1), r * 0.35, paint);
-
-    // Left leaf arc
-    final leftPath = Path()
-      ..moveTo(cx - r * 0.3, cy - r * 0.2)
-      ..cubicTo(cx - r, cy - r * 0.8, cx - r * 0.9, cy - r * 1.1,
-          cx - r * 0.1, cy - r * 0.7);
-    canvas.drawPath(leftPath, paint);
-
-    // Center stem
-    final stemPath = Path()
-      ..moveTo(cx, cy - r * 0.7)
-      ..lineTo(cx, cy - r * 1.2);
-    canvas.drawPath(stemPath, paint);
-
-    // Right leaf arc
-    final rightPath = Path()
-      ..moveTo(cx + r * 0.3, cy - r * 0.2)
-      ..cubicTo(cx + r, cy - r * 0.8, cx + r * 0.9, cy - r * 1.1,
-          cx + r * 0.1, cy - r * 0.7);
-    canvas.drawPath(rightPath, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
 /// ─────────────────────────────────────────────
 /// Pill-shaped Bottom Navigation Bar (3-tab: Buyer has 4)
 /// ─────────────────────────────────────────────
