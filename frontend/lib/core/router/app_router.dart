@@ -61,6 +61,17 @@ class AppRouter {
         return _slide(const BuyerTrackingPage());
       case '/buyer/profile':
         return _fade(const BuyerProfilePage());
+      // Buyer sub-pages
+      case '/buyer/address':
+        return _slide(const BuyerAddressPage());
+      case '/buyer/payment-method':
+        return _slide(const BuyerPaymentMethodPage());
+      case '/buyer/notifications':
+        return _slide(const BuyerNotificationsPage());
+      case '/buyer/help':
+        return _slide(const BuyerHelpPage());
+      case '/buyer/about':
+        return _slide(const BuyerAboutPage());
 
       // ─── Distributor ────────────────────────────────
       case '/distributor/home':
@@ -135,30 +146,72 @@ class AppRouter {
     );
   }
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // Transitions
+  // ─────────────────────────────────────────────────────────────────────────
+
+  /// Fade + subtle scale-up (0.96 → 1.0).
+  /// Used for: home pages, profile — "arriving" feel.
   static PageRoute _fade(Widget page) {
     return PageRouteBuilder(
       pageBuilder: (_, __, ___) => page,
+      transitionDuration: const Duration(milliseconds: 280),
+      reverseTransitionDuration: const Duration(milliseconds: 220),
       transitionsBuilder: (_, animation, __, child) {
-        return FadeTransition(opacity: animation, child: child);
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOut,
+          reverseCurve: Curves.easeIn,
+        );
+        return FadeTransition(
+          opacity: curved,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.96, end: 1.0).animate(curved),
+            child: child,
+          ),
+        );
       },
-      transitionDuration: const Duration(milliseconds: 300),
     );
   }
 
+  /// Horizontal micro-slide (5 %) + crossfade.
+  /// Used for: sub-pages, detail views — feels like content "stepping in".
   static PageRoute _slide(Widget page) {
     return PageRouteBuilder(
       pageBuilder: (_, __, ___) => page,
-      transitionsBuilder: (_, animation, __, child) {
-        const begin = Offset(1.0, 0.0);
-        const end = Offset.zero;
-        final tween = Tween(begin: begin, end: end)
-            .chain(CurveTween(curve: Curves.easeInOut));
+      transitionDuration: const Duration(milliseconds: 300),
+      reverseTransitionDuration: const Duration(milliseconds: 250),
+      transitionsBuilder: (_, animation, secondaryAnimation, child) {
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+          reverseCurve: Curves.easeInCubic,
+        );
+
+        // Outgoing page slides slightly to the left
+        final secondaryCurved = CurvedAnimation(
+          parent: secondaryAnimation,
+          curve: Curves.easeOutCubic,
+        );
+
         return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
+          position: Tween<Offset>(
+            begin: const Offset(0.05, 0),
+            end: Offset.zero,
+          ).animate(curved),
+          child: FadeTransition(
+            opacity: curved,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: Offset.zero,
+                end: const Offset(-0.05, 0),
+              ).animate(secondaryCurved),
+              child: child,
+            ),
+          ),
         );
       },
-      transitionDuration: const Duration(milliseconds: 280),
     );
   }
 }
+

@@ -19,7 +19,8 @@ class RegisterFormPage extends StatefulWidget {
   State<RegisterFormPage> createState() => _RegisterFormPageState();
 }
 
-class _RegisterFormPageState extends State<RegisterFormPage> {
+class _RegisterFormPageState extends State<RegisterFormPage>
+    with SingleTickerProviderStateMixin {
   final _emailCtrl = TextEditingController();
   final _usernameCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
@@ -29,12 +30,36 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
   // ignore: prefer_final_fields
   bool _obscureConfirmPassword = true;
 
+  late final AnimationController _ctrl;
+  late final Animation<double> _fade;
+  late final Animation<Offset> _slide;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _fade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _ctrl, curve: Curves.easeOut),
+    );
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.06),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic),
+    );
+    _ctrl.forward();
+  }
+
   @override
   void dispose() {
     _emailCtrl.dispose();
     _usernameCtrl.dispose();
     _passwordCtrl.dispose();
     _confirmPasswordCtrl.dispose();
+    _ctrl.dispose();
     super.dispose();
   }
 
@@ -44,18 +69,23 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Background — foto asli register_bg.jpg
-          // Figma: image 1564×877 dengan offset x=-973 pada frame 402px
+          // Background
           Image.asset(
             'assets/images/register_bg.jpg',
             fit: BoxFit.cover,
             alignment: const Alignment(0.65, 0.0),
           ),
-          // Centered glassmorphism card
-          Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
-              child: Container(
+          // Glassmorphism card — animated entrance
+          AnimatedBuilder(
+            animation: _ctrl,
+            builder: (_, child) => SlideTransition(
+              position: _slide,
+              child: Opacity(opacity: _fade.value, child: child),
+            ),
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 28),
+                child: Container(
                 padding: const EdgeInsets.all(28),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.18),
@@ -130,7 +160,8 @@ class _RegisterFormPageState extends State<RegisterFormPage> {
                 ),
               ),
             ),
-          ),
+            ),
+          ),  // AnimatedBuilder
         ],
       ),
     );
@@ -155,15 +186,40 @@ class VerificationCodePage extends StatefulWidget {
   State<VerificationCodePage> createState() => _VerificationCodePageState();
 }
 
-class _VerificationCodePageState extends State<VerificationCodePage> {
+class _VerificationCodePageState extends State<VerificationCodePage>
+    with SingleTickerProviderStateMixin {
   final List<TextEditingController> _otpControllers =
       List.generate(5, (_) => TextEditingController());
+
+  late final AnimationController _ctrl;
+  late final Animation<double> _fade;
+  late final Animation<Offset> _slide;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _fade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _ctrl, curve: Curves.easeOut),
+    );
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.06),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic),
+    );
+    _ctrl.forward();
+  }
 
   @override
   void dispose() {
     for (final c in _otpControllers) {
       c.dispose();
     }
+    _ctrl.dispose();
     super.dispose();
   }
 
@@ -179,20 +235,26 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
             fit: BoxFit.cover,
             alignment: const Alignment(0.65, 0.0),
           ),
-          // Glass card
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
-              child: Container(
-                padding: const EdgeInsets.all(28),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.18),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.35),
-                    width: 1,
+          // Glass card — animated entrance
+          AnimatedBuilder(
+            animation: _ctrl,
+            builder: (_, child) => SlideTransition(
+              position: _slide,
+              child: Opacity(opacity: _fade.value, child: child),
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 28),
+                child: Container(
+                  padding: const EdgeInsets.all(28),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.18),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.35),
+                      width: 1,
+                    ),
                   ),
-                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -296,7 +358,8 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                 ),
               ),
             ),
-          ),
+            ),
+          ),  // AnimatedBuilder
         ],
       ),
     );

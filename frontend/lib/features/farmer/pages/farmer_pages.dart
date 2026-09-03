@@ -17,6 +17,21 @@ class FarmerHomePage extends StatefulWidget {
 class _FarmerHomePageState extends State<FarmerHomePage> {
   int _currentNavIndex = 0;
 
+  static const _recentActiveOffers = [
+    {
+      'commodity': 'Beras Premium',
+      'price': 'Rp 11.500/kg',
+      'qty': '150 kg',
+      'status': 'Aktif',
+    },
+    {
+      'commodity': 'Cabai Merah',
+      'price': 'Rp 30.000/kg',
+      'qty': '80 kg',
+      'status': 'Aktif',
+    },
+  ];
+
   void _onNavTap(int index) {
     setState(() => _currentNavIndex = index);
     switch (index) {
@@ -196,17 +211,42 @@ class _FarmerHomePageState extends State<FarmerHomePage> {
             ),
             const SizedBox(height: 20),
 
-            // Recent offers summary
-            Container(
-              height: 120,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE8E8E8),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Center(
-                child: Text('Tawaran Terbaru',
-                    style: TextStyle(
-                        fontSize: 13, color: AppColors.textSecondary)),
+            // Tawaran Aktif Terbaru section
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Tawaran Aktif Terbaru',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.accentOrange,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(
+                      context, '/farmer/active-offers'),
+                  child: const Row(
+                    children: [
+                      Text('Lihat Semua',
+                          style: TextStyle(
+                              fontSize: 12, color: AppColors.textSecondary)),
+                      Icon(Icons.chevron_right,
+                          size: 16, color: AppColors.textSecondary),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ..._recentActiveOffers.map(
+              (o) => _FarmerOfferPreviewCard(
+                commodity: o['commodity']!,
+                price: o['price']!,
+                qty: o['qty']!,
+                status: o['status']!,
+                onTap: () => Navigator.pushNamed(
+                    context, '/farmer/active-offers'),
               ),
             ),
           ],
@@ -227,8 +267,79 @@ class _FarmerHomePageState extends State<FarmerHomePage> {
 }
 
 // ─────────────────────────────────────────────
-// FARMER - BUAT TAWARAN (Wizard 2-step)
-// Referensi: Screenshot 47 - wizard: Input Informasi, Tetapkan Harga, Konfirmasi
+// FARMER HOME — Offer Preview Card
+// ─────────────────────────────────────────────
+class _FarmerOfferPreviewCard extends StatelessWidget {
+  final String commodity;
+  final String price;
+  final String qty;
+  final String status;
+  final VoidCallback onTap;
+
+  const _FarmerOfferPreviewCard({
+    required this.commodity,
+    required this.price,
+    required this.qty,
+    required this.status,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.borderColor),
+        ),
+        child: Row(
+          children: [
+            const ProductImagePlaceholder(size: 60),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      StatusBadge.fromStatus(status),
+                      const Icon(Icons.chevron_right,
+                          size: 16, color: AppColors.textSecondary),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    commodity,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '$price  •  $qty',
+                    style: const TextStyle(
+                        fontSize: 12, color: AppColors.textSecondary),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────
+// FARMER - BUAT TAWARAN (Wizard 2-step sesuai Figma)
+// Frame 48: Pilih Kategori | Frame 49: Form Detail
 // ─────────────────────────────────────────────
 class FarmerCreateOfferPage extends StatefulWidget {
   const FarmerCreateOfferPage({super.key});
@@ -238,23 +349,25 @@ class FarmerCreateOfferPage extends StatefulWidget {
 }
 
 class _FarmerCreateOfferPageState extends State<FarmerCreateOfferPage> {
+  // Step 0 = pilih kategori, Step 1 = form detail
   int _step = 0;
+  String? _selectedCategory;
 
-  final _steps = ['Input Informasi', 'Tetapkan Harga', 'Konfirmasi'];
-
-  // Form controllers
-  final _nameCtrl = TextEditingController();
+  // Form controllers (step 2)
   final _qtyCtrl = TextEditingController();
   final _priceCtrl = TextEditingController();
+  final _locationCtrl = TextEditingController();
   final _noteCtrl = TextEditingController();
-  String? _category;
-  bool _allowNegotiation = false;
+
+  static const _categories = [
+    'Beras', 'Cabai', 'Tomat', 'Jagung', 'Bawang', 'Sayuran', 'Buah-buahan',
+  ];
 
   @override
   void dispose() {
-    _nameCtrl.dispose();
     _qtyCtrl.dispose();
     _priceCtrl.dispose();
+    _locationCtrl.dispose();
     _noteCtrl.dispose();
     super.dispose();
   }
@@ -263,33 +376,33 @@ class _FarmerCreateOfferPageState extends State<FarmerCreateOfferPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: _step > 0
-          ? AppBar(
-              backgroundColor: AppColors.white,
-              elevation: 0,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back,
-                    color: AppColors.primaryGreen),
-                onPressed: () => setState(() => _step--),
-              ),
-              title: Text(
-                _steps[_step],
-                style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryGreen),
-              ),
-            )
-          : null,
-      body: _step == 0
-          ? _buildOverview()
-          : _step == 1
-              ? _buildStep1()
-              : _buildStep2(),
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.primaryGreen),
+          onPressed: () {
+            if (_step > 0) {
+              setState(() => _step--);
+            } else {
+              Navigator.pop(context);
+            }
+          },
+        ),
+        title: Text(
+          _step == 0 ? 'Buat Tawaran Baru' : 'Buat Produk Baru',
+          style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primaryGreen),
+        ),
+      ),
+      body: _step == 0 ? _buildCategoryPicker() : _buildFormDetail(),
     );
   }
 
-  Widget _buildOverview() {
+  // ── STEP 0: Pilih Kategori (Figma Frame 48) ──
+  Widget _buildCategoryPicker() {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -297,33 +410,47 @@ class _FarmerCreateOfferPageState extends State<FarmerCreateOfferPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Buat Tawaran',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              'Pilih jenis hasil panen\n(kategori)',
+              style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.textSecondary),
             ),
-            const SizedBox(height: 24),
-            ...List.generate(_steps.length, (i) {
-              final isActive = i == 0;
-              return _WizardStepItem(
-                index: i + 1,
-                label: _steps[i],
-                isActive: isActive,
-                isLast: i == _steps.length - 1,
-                onTap: isActive ? () => setState(() => _step = 1) : null,
-              );
-            }),
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: OutlinedButton(
-                onPressed: () => Navigator.pop(context),
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.borderColor),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-                child: const Text('Batalkan',
-                    style: TextStyle(color: AppColors.textSecondary)),
+            const SizedBox(height: 16),
+            Expanded(
+              child: ListView.separated(
+                itemCount: _categories.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                itemBuilder: (context, i) {
+                  final cat = _categories[i];
+                  return GestureDetector(
+                    onTap: () => setState(() {
+                      _selectedCategory = cat;
+                      _step = 1;
+                    }),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 20),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: _selectedCategory == cat
+                              ? AppColors.primaryGreen
+                              : AppColors.borderColor,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        cat,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: _selectedCategory == cat
+                              ? AppColors.primaryGreen
+                              : AppColors.textPrimary,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
@@ -332,83 +459,8 @@ class _FarmerCreateOfferPageState extends State<FarmerCreateOfferPage> {
     );
   }
 
-  Widget _buildStep1() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _formLabel('Nama Produk'),
-          _textField(_nameCtrl, 'Nama produk...'),
-          const SizedBox(height: 14),
-          _formLabel('Kategori Produk'),
-          _dropdownField('Pilih kategori', _category,
-              (v) => setState(() => _category = v)),
-          const SizedBox(height: 14),
-          _formLabel('Jumlah yang Ditawarkan'),
-          Row(
-            children: [
-              Expanded(child: _textField(_qtyCtrl, '120')),
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.borderColor),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text('kg',
-                    style: TextStyle(color: AppColors.textSecondary)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          _formLabel('Foto Produk'),
-          Row(
-            children: [
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.borderColor),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.borderColor),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.add,
-                    color: AppColors.primaryGreen, size: 28),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          Align(
-            alignment: Alignment.centerRight,
-            child: SizedBox(
-              width: 120,
-              height: 46,
-              child: ElevatedButton(
-                onPressed: () => setState(() => _step = 2),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryGreenDark,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
-                child: const Text('Lanjutkan'),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStep2() {
+  // ── STEP 1: Form Detail (Figma Frame 49) ──
+  Widget _buildFormDetail() {
     return Column(
       children: [
         Expanded(
@@ -417,55 +469,42 @@ class _FarmerCreateOfferPageState extends State<FarmerCreateOfferPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _formLabel('Harga Tawar'),
+                _formLabel('Input jumlah'),
+                _textField(_qtyCtrl, '11.500'),
+                const SizedBox(height: 14),
+                _formLabel('Input harga yang diinginkan'),
+                _textField(_priceCtrl, ''),
+                const SizedBox(height: 14),
+                _formLabel('Input lokasi hasil panen'),
+                _textField(_locationCtrl, ''),
+                const SizedBox(height: 14),
+                _formLabel('Upload foto hasil panen'),
                 Row(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(right: 8),
-                      child: Text('Rp',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.textSecondary)),
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.borderColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                    Expanded(child: _textField(_priceCtrl, '11.500')),
-                    const SizedBox(width: 8),
-                    const Text('/kg',
-                        style: TextStyle(color: AppColors.textSecondary)),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                _formLabel('Catatan (Opsional)'),
-                TextField(
-                  controller: _noteCtrl,
-                  maxLines: 4,
-                  decoration: InputDecoration(
-                    hintText: 'Tuliskan catatan untuk distributor...',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            const BorderSide(color: AppColors.borderColor)),
-                    enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            const BorderSide(color: AppColors.borderColor)),
-                    contentPadding: const EdgeInsets.all(14),
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Izinkan Negosiasi',
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w500)),
-                    Switch(
-                      value: _allowNegotiation,
-                      onChanged: (v) =>
-                          setState(() => _allowNegotiation = v),
-                      activeThumbColor: AppColors.primaryGreen,
+                    const SizedBox(width: 10),
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.borderColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(Icons.add,
+                          color: AppColors.primaryGreen, size: 28),
                     ),
                   ],
                 ),
+                const SizedBox(height: 14),
+                _formLabel('Catatan Tambahan (Opsional)'),
+                _textField(_noteCtrl, ''),
               ],
             ),
           ),
@@ -484,7 +523,9 @@ class _FarmerCreateOfferPageState extends State<FarmerCreateOfferPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
               ),
-              child: const Text('Kirim Tawaran'),
+              child: const Text('Buat Tawaran',
+                  style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600)),
             ),
           ),
         ),
@@ -494,7 +535,7 @@ class _FarmerCreateOfferPageState extends State<FarmerCreateOfferPage> {
 
   Widget _formLabel(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Text(text,
           style: const TextStyle(
               fontSize: 13,
@@ -521,30 +562,6 @@ class _FarmerCreateOfferPageState extends State<FarmerCreateOfferPage> {
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       ),
-    );
-  }
-
-  Widget _dropdownField(
-      String hint, String? value, ValueChanged<String?> onChanged) {
-    return DropdownButtonFormField<String>(
-      initialValue: value,
-      hint: Text(hint),
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.borderColor)),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.borderColor)),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      ),
-      items: const [
-        DropdownMenuItem(value: 'Beras', child: Text('Beras')),
-        DropdownMenuItem(value: 'Sayur', child: Text('Sayur')),
-        DropdownMenuItem(value: 'Buah', child: Text('Buah')),
-      ],
-      onChanged: onChanged,
     );
   }
 }
@@ -878,8 +895,10 @@ class _FarmerRecentOffersPageState extends State<FarmerRecentOffersPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: 5,
               itemBuilder: (context, i) {
-                final statuses = ['Diterima', 'Ditolak', 'Selesai', 'Diterima', 'Ditolak'];
+                final statuses = ['Baru', 'Baru', 'Diterima', 'Baru', 'Diterima'];
+                final times = ['1 Jam yang lalu', '2 Jam yang lalu', '3 Jam yang lalu', '5 Jam yang lalu', '1 hari yang lalu'];
                 final status = statuses[i % statuses.length];
+                final timeAgo = times[i % times.length];
                 return Container(
                   margin: const EdgeInsets.only(bottom: 10),
                   padding: const EdgeInsets.all(12),
@@ -895,29 +914,31 @@ class _FarmerRecentOffersPageState extends State<FarmerRecentOffersPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                StatusBadge.fromStatus(status),
-                                const Spacer(),
-                                const Text('2 hari lalu',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: AppColors.textSecondary)),
-                              ],
-                            ),
+                            StatusBadge.fromStatus(status),
                             const SizedBox(height: 4),
-                            const Text('Tawaran ID - 12345689',
-                                style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold)),
                             const Text('Beras Premium',
                                 style: TextStyle(
-                                    fontSize: 12,
-                                    color: AppColors.textSecondary)),
-                            const Text('120 kg • Rp 11.500/kg',
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppColors.textPrimary)),
+                            const Text('11.500/kg',
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: AppColors.textSecondary)),
+                            const Text('150 kg',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppColors.textSecondary)),
+                            const SizedBox(height: 6),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                timeAgo,
+                                style: const TextStyle(
+                                    fontSize: 11,
+                                    color: AppColors.textSecondary),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -1574,10 +1595,24 @@ class FarmerProfilePage extends StatelessWidget {
                 onTap: () =>
                     Navigator.pushNamed(context, '/farmer/income')),
             _FarmerProfileItem(
-                icon: Icons.settings_outlined,
-                label: 'Pengaturan',
-                onTap: () {}),
+                icon: Icons.notifications_outlined,
+                label: 'Notifikasi',
+                onTap: () =>
+                    Navigator.pushNamed(context, '/buyer/notifications')),
+            _FarmerProfileItem(
+                icon: Icons.help_outline,
+                label: 'Bantuan & FAQ',
+                onTap: () =>
+                    Navigator.pushNamed(context, '/buyer/help')),
             const SizedBox(height: 12),
+            // Switch role
+            _FarmerProfileItem(
+              icon: Icons.swap_horiz_rounded,
+              label: 'Beralih ke Mode Pembeli',
+              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                  context, '/buyer/home', (route) => false),
+            ),
+            const SizedBox(height: 4),
             _FarmerProfileItem(
               icon: Icons.logout,
               label: 'Keluar',

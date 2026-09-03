@@ -17,10 +17,10 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
   int _currentNavIndex = 0;
 
   final _buyerMenus = [
-    const _MenuData(icon: Icons.store_outlined, label: 'Toko'),
-    const _MenuData(icon: Icons.category_outlined, label: 'Kategori'),
-    const _MenuData(icon: Icons.history_outlined, label: 'Riwayat'),
-    const _MenuData(icon: Icons.local_offer_outlined, label: 'Promo'),
+    const _MenuData(icon: Icons.store_outlined, label: 'Toko', route: '/buyer/shop'),
+    const _MenuData(icon: Icons.category_outlined, label: 'Kategori', route: '/buyer/shop'),
+    const _MenuData(icon: Icons.history_outlined, label: 'Riwayat', route: '/buyer/order-status'),
+    const _MenuData(icon: Icons.local_offer_outlined, label: 'Promo', route: '/buyer/shop'),
   ];
 
   static const _popularProducts = [
@@ -175,7 +175,11 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
                   .map((m) => MenuGridItem(
                         icon: m.icon,
                         label: m.label,
-                        onTap: () {},
+                        onTap: () {
+                          if (m.route != null) {
+                            Navigator.pushNamed(context, m.route!);
+                          }
+                        },
                       ))
                   .toList(),
             ),
@@ -355,7 +359,8 @@ class _PopularProductCard extends StatelessWidget {
 class _MenuData {
   final IconData icon;
   final String label;
-  const _MenuData({required this.icon, required this.label});
+  final String? route;
+  const _MenuData({required this.icon, required this.label, this.route});
 }
 
 // Data class untuk produk populer
@@ -2209,14 +2214,68 @@ class BuyerTrackingPage extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER PROFILE PAGE
-// ─────────────────────────────────────────────
-class BuyerProfilePage extends StatelessWidget {
+// Standard layout + DANA-style pill tabs ONLY for Peran Saya section
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum _RoleStatus { active, pending, notApplied }
+
+class BuyerProfilePage extends StatefulWidget {
   const BuyerProfilePage({super.key});
 
   @override
+  State<BuyerProfilePage> createState() => _BuyerProfilePageState();
+}
+
+class _BuyerProfilePageState extends State<BuyerProfilePage>
+    with TickerProviderStateMixin {
+  int _selectedRoleIndex = 0;
+
+  final Map<String, _RoleStatus> _roleStatus = {
+    'pembeli': _RoleStatus.active,
+    'distributor': _RoleStatus.notApplied,
+    'farmer': _RoleStatus.notApplied,
+  };
+
+  static const _roleKeys = ['pembeli', 'distributor', 'farmer'];
+  static const _roleLabels = ['Pembeli', 'Distributor', 'Petani'];
+  static const _roleIcons = [
+    Icons.shopping_bag_outlined,
+    Icons.local_shipping_outlined,
+    Icons.grass_outlined,
+  ];
+  static const _roleDescs = [
+    'Beli hasil panen segar langsung dari petani & distributor.',
+    'Beli dari petani, jual ke pembeli atau pasar dengan harga kompetitif.',
+    'Jual hasil panen Anda ke pembeli atau distributor di seluruh Indonesia.',
+  ];
+
+  void _handleRoleTap(int index) {
+    // Always switch tab immediately
+    setState(() => _selectedRoleIndex = index);
+  }
+
+  void _submitApply() {
+    final key = _roleKeys[_selectedRoleIndex];
+    setState(() => _roleStatus[key] = _RoleStatus.pending);
+  }
+
+  void _cancelApply() {
+    setState(() => _selectedRoleIndex = 0);
+  }
+
+  void _simulateApproval(String roleKey) {
+    setState(() => _roleStatus[roleKey] = _RoleStatus.active);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final currentKey = _roleKeys[_selectedRoleIndex];
+    final currentStatus =
+        _selectedRoleIndex == 0 ? _RoleStatus.active : _roleStatus[currentKey]!;
+    final isApplyView = currentStatus == _RoleStatus.notApplied;
+
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
       appBar: AppBar(
@@ -2231,93 +2290,115 @@ class BuyerProfilePage extends StatelessWidget {
             color: AppColors.textPrimary,
           ),
         ),
+        actions: [
+          if (!isApplyView)
+            IconButton(
+              icon: const Icon(Icons.notifications_outlined,
+                  color: AppColors.primaryGreen),
+              onPressed: () =>
+                  Navigator.pushNamed(context, '/buyer/notifications'),
+            ),
+        ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            // Profile header
-            Container(
-              padding: const EdgeInsets.all(16),
+      body: Column(
+        children: [
+          // ── Role pill tabs — always pinned at top ─────────────────────────
+          Container(
+            color: AppColors.white,
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+            child: Container(
               decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(12),
+                color: AppColors.backgroundGrey,
+                borderRadius: BorderRadius.circular(10),
               ),
+              padding: const EdgeInsets.all(3),
               child: Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 30,
-                    backgroundColor: AppColors.primaryGreen,
-                    child: Icon(Icons.person, color: Colors.white, size: 30),
-                  ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Ara',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                        Text('Pembeli',
-                            style: TextStyle(
-                                fontSize: 13, color: AppColors.textSecondary)),
-                      ],
+                children: List.generate(3, (i) {
+                  final isSelected = _selectedRoleIndex == i;
+                  return Expanded(
+                    child: GestureDetector(
+                      onTap: () => _handleRoleTap(i),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeOut,
+                        padding: const EdgeInsets.symmetric(vertical: 9),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? AppColors.white
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: isSelected
+                              ? [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.08),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ]
+                              : null,
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          _roleLabels[i],
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: isSelected
+                                ? FontWeight.w700
+                                : FontWeight.w400,
+                            color: isSelected
+                                ? AppColors.primaryGreen
+                                : AppColors.textSecondary,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.edit_outlined,
-                        color: AppColors.primaryGreen),
-                    onPressed: () {},
-                  ),
-                ],
+                  );
+                }),
               ),
             ),
-            const SizedBox(height: 12),
+          ),
 
-            // Menu items
-            _ProfileMenuItem(
-              icon: Icons.receipt_long_outlined,
-              label: 'Pesanan Saya',
-              onTap: () {},
+          // ── Body: apply screen OR normal profile ──────────────────────────
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              switchInCurve: Curves.easeOut,
+              switchOutCurve: Curves.easeIn,
+              transitionBuilder: (child, anim) => FadeTransition(
+                opacity: anim,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0, 0.04),
+                    end: Offset.zero,
+                  ).animate(anim),
+                  child: child,
+                ),
+              ),
+              child: isApplyView
+                  ? _applyScreen(key: ValueKey('apply_$_selectedRoleIndex'))
+                  : _profileBody(
+                      key: ValueKey('profile_$_selectedRoleIndex'),
+                      currentStatus: currentStatus,
+                    ),
             ),
-            _ProfileMenuItem(
-              icon: Icons.location_on_outlined,
-              label: 'Alamat Pengiriman',
-              onTap: () {},
-            ),
-            _ProfileMenuItem(
-              icon: Icons.payment_outlined,
-              label: 'Metode Pembayaran',
-              onTap: () {},
-            ),
-            _ProfileMenuItem(
-              icon: Icons.notifications_outlined,
-              label: 'Notifikasi',
-              onTap: () {},
-            ),
-            _ProfileMenuItem(
-              icon: Icons.help_outline,
-              label: 'Bantuan',
-              onTap: () {},
-            ),
-            const SizedBox(height: 12),
-            _ProfileMenuItem(
-              icon: Icons.logout,
-              label: 'Keluar',
-              textColor: AppColors.error,
-              onTap: () => Navigator.pushNamedAndRemoveUntil(
-                  context, '/splash', (route) => false),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: CropChainBottomNav(
         currentIndex: 3,
         items: const [
-          BottomNavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
-          BottomNavItem(icon: Icons.store_outlined, activeIcon: Icons.store, label: 'Shop'),
-          BottomNavItem(icon: Icons.shopping_cart_outlined, activeIcon: Icons.shopping_cart, label: 'Cart'),
-          BottomNavItem(icon: Icons.person_outline, activeIcon: Icons.person, label: 'Profile'),
+          BottomNavItem(
+              icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
+          BottomNavItem(
+              icon: Icons.store_outlined, activeIcon: Icons.store, label: 'Shop'),
+          BottomNavItem(
+              icon: Icons.shopping_cart_outlined,
+              activeIcon: Icons.shopping_cart,
+              label: 'Cart'),
+          BottomNavItem(
+              icon: Icons.person_outline,
+              activeIcon: Icons.person,
+              label: 'Profile'),
         ],
         onTap: (i) {
           if (i == 0) {
@@ -2330,6 +2411,508 @@ class BuyerProfilePage extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  // ── Apply screen — replaces menu body when role notApplied ────────────────
+  Widget _applyScreen({required Key key}) {
+    final label = _roleLabels[_selectedRoleIndex];
+    final icon = _roleIcons[_selectedRoleIndex];
+    final desc = _roleDescs[_selectedRoleIndex];
+    final isDistributor = _selectedRoleIndex == 1;
+
+    final benefits = isDistributor
+        ? [
+            'Beli langsung dari petani dengan harga lebih kompetitif',
+            'Pasarkan produk ke ribuan pembeli di platform',
+            'Kelola stok & pengiriman dari satu dashboard',
+            'Laporan pendapatan real-time',
+          ]
+        : [
+            'Tawarkan hasil panen ke distributor & pembeli langsung',
+            'Negosiasi harga secara transparan',
+            'Pantau status tawaran kapan saja',
+            'Pembayaran aman & tepat waktu',
+          ];
+
+    return SingleChildScrollView(
+      key: key,
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 16),
+          // Icon
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: AppColors.lightGreenBg,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Icon(icon, color: AppColors.primaryGreen, size: 38),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Ajukan sebagai $label',
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            desc,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+              height: 1.5,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 28),
+
+          // Benefits
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.borderColor),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Keuntungan bergabung:',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                ...benefits.map((b) => Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.check_circle,
+                              size: 16, color: AppColors.primaryGreen),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              b,
+                              style: const TextStyle(
+                                  fontSize: 13,
+                                  color: AppColors.textPrimary,
+                                  height: 1.4),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Verification note
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: AppColors.accentOrange.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.info_outline,
+                    size: 16, color: AppColors.accentOrange),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text(
+                    'Proses verifikasi 1–3 hari kerja oleh tim CropChain.',
+                    style: TextStyle(
+                        fontSize: 12, color: AppColors.accentOrange),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // CTA button
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: ElevatedButton(
+              onPressed: _submitApply,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryGreenDark,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
+              child: const Text(
+                'Kirim Pengajuan',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Cancel link
+          GestureDetector(
+            onTap: _cancelApply,
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: Text(
+                'Batal',
+                style: TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textSecondary,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+
+  // ── Normal profile body (active/pending) ──────────────────────────────────
+  Widget _profileBody({required Key key, required _RoleStatus currentStatus}) {
+    final currentKey = _roleKeys[_selectedRoleIndex];
+    final isActive = currentStatus == _RoleStatus.active;
+    final isPending = currentStatus == _RoleStatus.pending;
+
+    return SingleChildScrollView(
+      key: key,
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Role status strip (if not Pembeli)
+          if (_selectedRoleIndex != 0) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? AppColors.lightGreenBg
+                          : AppColors.backgroundGrey,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(_roleIcons[_selectedRoleIndex],
+                        color: isActive
+                            ? AppColors.primaryGreen
+                            : AppColors.textSecondary,
+                        size: 18),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _roleLabels[_selectedRoleIndex],
+                          style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textPrimary),
+                        ),
+                        const SizedBox(height: 2),
+                        if (isActive)
+                          const Text('Aktif',
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: AppColors.primaryGreen,
+                                  fontWeight: FontWeight.w600))
+                        else
+                          const Text('Menunggu Verifikasi',
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: AppColors.accentOrange,
+                                  fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
+                  if (isActive)
+                    GestureDetector(
+                      onTap: () {
+                        if (currentKey == 'distributor') {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/distributor/home', (r) => false);
+                        } else if (currentKey == 'farmer') {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/farmer/home', (r) => false);
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryGreenDark,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text('Buka',
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white)),
+                      ),
+                    )
+                  else if (isPending)
+                    GestureDetector(
+                      onTap: () => _simulateApproval(currentKey),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.accentOrange.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                              color:
+                                  AppColors.accentOrange.withValues(alpha: 0.5)),
+                        ),
+                        child: const Text('Demo: Aktifkan',
+                            style: TextStyle(
+                                fontSize: 11,
+                                color: AppColors.accentOrange,
+                                fontWeight: FontWeight.w600)),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+
+          // ── Profile card ───────────────────────────────────────────────────
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    const CircleAvatar(
+                      radius: 30,
+                      backgroundColor: AppColors.lightGreenBg,
+                      child: Icon(Icons.person,
+                          color: AppColors.primaryGreen, size: 30),
+                    ),
+                    Positioned(
+                      right: -2,
+                      bottom: -2,
+                      child: Container(
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                          color: AppColors.accentOrange,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 1.5),
+                        ),
+                        child: const Icon(Icons.edit,
+                            size: 11, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Ara',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppColors.lightGreenBg,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Text(
+                              '🛒 Pembeli',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.primaryGreen,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          const Text(
+                            'Jakarta',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: AppColors.textSecondary),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.primaryGreen,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 6),
+                  ),
+                  child: const Text('Edit',
+                      style: TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.w600)),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // ── Transaksi ──────────────────────────────────────────────────────
+          _ProfileSection(
+            label: 'Transaksi',
+            children: [
+              _ProfileMenuItem(
+                icon: Icons.receipt_long_outlined,
+                label: 'Pesanan Saya',
+                onTap: () =>
+                    Navigator.pushNamed(context, '/buyer/order-status'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // ── Pengaturan Akun ────────────────────────────────────────────────
+          _ProfileSection(
+            label: 'Pengaturan Akun',
+            children: [
+              _ProfileMenuItem(
+                icon: Icons.location_on_outlined,
+                label: 'Alamat Pengiriman',
+                onTap: () => Navigator.pushNamed(context, '/buyer/address'),
+              ),
+              _ProfileMenuItem(
+                icon: Icons.payment_outlined,
+                label: 'Metode Pembayaran',
+                onTap: () =>
+                    Navigator.pushNamed(context, '/buyer/payment-method'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // ── Dukungan ──────────────────────────────────────────────────────
+          _ProfileSection(
+            label: 'Dukungan',
+            children: [
+              _ProfileMenuItem(
+                icon: Icons.help_outline,
+                label: 'Bantuan & FAQ',
+                onTap: () => Navigator.pushNamed(context, '/buyer/help'),
+              ),
+              _ProfileMenuItem(
+                icon: Icons.info_outline,
+                label: 'Tentang CropChain',
+                onTap: () => Navigator.pushNamed(context, '/buyer/about'),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // ── Keluar ────────────────────────────────────────────────────────
+          _ProfileSection(
+            children: [
+              _ProfileMenuItem(
+                icon: Icons.logout,
+                label: 'Keluar',
+                textColor: AppColors.error,
+                onTap: () => Navigator.pushNamedAndRemoveUntil(
+                    context, '/splash', (route) => false),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+}
+class _ProfileSection extends StatelessWidget {
+  final String? label;
+  final List<Widget> children;
+
+  const _ProfileSection({this.label, required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (label != null) ...[
+          Padding(
+            padding: const EdgeInsets.only(left: 4, bottom: 8),
+            child: Text(
+              label!.toUpperCase(),
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: AppColors.textSecondary,
+                letterSpacing: 0.8,
+              ),
+            ),
+          ),
+        ],
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            children: List.generate(children.length, (i) {
+              return Column(
+                children: [
+                  children[i],
+                  if (i < children.length - 1)
+                    const Divider(
+                        height: 1,
+                        indent: 52,
+                        endIndent: 16,
+                        color: AppColors.borderColor),
+                ],
+              );
+            }),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -2349,23 +2932,846 @@ class _ProfileMenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ListTile(
+      leading: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: textColor != null
+              ? textColor!.withValues(alpha: 0.1)
+              : AppColors.lightGreenBg,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Icon(icon,
+            color: textColor ?? AppColors.primaryGreen, size: 19),
+      ),
+      title: Text(
+        label,
+        style: TextStyle(
+          fontSize: 14,
+          color: textColor ?? AppColors.textPrimary,
+        ),
+      ),
+      trailing: Icon(
+        Icons.chevron_right,
+        color: textColor?.withValues(alpha: 0.5) ?? AppColors.textSecondary,
+        size: 20,
+      ),
+      onTap: onTap,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      minLeadingWidth: 36,
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUYER ADDRESS PAGE
+// ─────────────────────────────────────────────────────────────────────────────
+class BuyerAddressPage extends StatefulWidget {
+  const BuyerAddressPage({super.key});
+
+  @override
+  State<BuyerAddressPage> createState() => _BuyerAddressPageState();
+}
+
+class _BuyerAddressPageState extends State<BuyerAddressPage> {
+  final List<Map<String, String>> _addresses = [
+    {
+      'label': 'Rumah',
+      'name': 'Ara',
+      'phone': '+62 812-3456-7890',
+      'address': 'Jl. Merdeka No. 12, Menteng, Jakarta Pusat 10320',
+    },
+    {
+      'label': 'Kantor',
+      'name': 'Ara (Kantor)',
+      'phone': '+62 812-3456-7890',
+      'address': 'Gedung Sudirman, Jl. Jend. Sudirman Kav. 52-53, Jakarta 12190',
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundGrey,
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        title: const Text(
+          'Alamat Pengiriman',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Fitur tambah alamat segera hadir!')),
+          );
+        },
+        backgroundColor: AppColors.primaryGreenDark,
+        icon: const Icon(Icons.add, color: Colors.white),
+        label: const Text('Tambah Alamat',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: _addresses.length,
+        itemBuilder: (_, i) {
+          final addr = _addresses[i];
+          final isFirst = i == 0;
+          return Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: isFirst
+                  ? Border.all(
+                      color: AppColors.primaryGreen.withValues(alpha: 0.5),
+                      width: 1.5)
+                  : null,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: isFirst
+                            ? AppColors.lightGreenBg
+                            : AppColors.backgroundGrey,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        addr['label']!,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: isFirst
+                              ? AppColors.primaryGreen
+                              : AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                    if (isFirst) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color:
+                              AppColors.primaryGreen.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: const Text(
+                          'Utama',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.primaryGreen,
+                          ),
+                        ),
+                      ),
+                    ],
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Text(
+                        'Ubah',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppColors.primaryGreen,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  addr['name']!,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(addr['phone']!,
+                    style: const TextStyle(
+                        fontSize: 13, color: AppColors.textSecondary)),
+                const SizedBox(height: 4),
+                Text(
+                  addr['address']!,
+                  style: const TextStyle(
+                      fontSize: 13, color: AppColors.textPrimary, height: 1.4),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUYER PAYMENT METHOD PAGE
+// ─────────────────────────────────────────────────────────────────────────────
+class BuyerPaymentMethodPage extends StatelessWidget {
+  const BuyerPaymentMethodPage({super.key});
+
+  static const _methods = [
+    _PayMethodData(
+      icon: Icons.qr_code_2_rounded,
+      label: 'QRIS',
+      detail: 'Scan QR dari semua e-wallet & bank',
+      color: Color(0xFF2196F3),
+    ),
+    _PayMethodData(
+      icon: Icons.account_balance_outlined,
+      label: 'BCA Virtual Account',
+      detail: '••• 4521',
+      color: Color(0xFF0D47A1),
+    ),
+    _PayMethodData(
+      icon: Icons.credit_card_outlined,
+      label: 'Kartu Kredit / Debit',
+      detail: 'Visa ••• 8890',
+      color: Color(0xFF6A1B9A),
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundGrey,
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        title: const Text(
+          'Metode Pembayaran',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          ..._methods.map((m) => _PayMethodCard(data: m)),
+          const SizedBox(height: 8),
+          GestureDetector(
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text('Fitur tambah metode segera hadir!')),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                    color: AppColors.primaryGreen.withValues(alpha: 0.4),
+                    style: BorderStyle.solid,
+                    width: 1.5),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.add_circle_outline,
+                      color: AppColors.primaryGreen, size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    'Tambah Metode Pembayaran',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.primaryGreen,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PayMethodData {
+  final IconData icon;
+  final String label;
+  final String detail;
+  final Color color;
+  const _PayMethodData(
+      {required this.icon,
+      required this.label,
+      required this.detail,
+      required this.color});
+}
+
+class _PayMethodCard extends StatelessWidget {
+  final _PayMethodData data;
+  const _PayMethodCard({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: ListTile(
-        leading: Icon(icon, color: textColor ?? AppColors.primaryGreen),
-        title: Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            color: textColor ?? AppColors.textPrimary,
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: data.color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(data.icon, color: data.color, size: 22),
           ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(data.label,
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary)),
+                const SizedBox(height: 2),
+                Text(data.detail,
+                    style: const TextStyle(
+                        fontSize: 12, color: AppColors.textSecondary)),
+              ],
+            ),
+          ),
+          const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+        ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUYER NOTIFICATIONS PAGE
+// ─────────────────────────────────────────────────────────────────────────────
+class BuyerNotificationsPage extends StatefulWidget {
+  const BuyerNotificationsPage({super.key});
+
+  @override
+  State<BuyerNotificationsPage> createState() => _BuyerNotificationsPageState();
+}
+
+class _BuyerNotificationsPageState extends State<BuyerNotificationsPage> {
+  final List<_NotifData> _notifs = [
+    _NotifData(
+      icon: Icons.local_shipping_outlined,
+      color: AppColors.primaryGreen,
+      title: 'Pesanan Dikirim',
+      body: 'Pesanan #CC-2024-001 sedang dalam perjalanan ke alamat Anda.',
+      time: '10 mnt lalu',
+      isRead: false,
+    ),
+    _NotifData(
+      icon: Icons.check_circle_outline,
+      color: Colors.teal,
+      title: 'Pembayaran Berhasil',
+      body: 'Pembayaran Rp 240.000 untuk pesanan #CC-2024-001 telah dikonfirmasi.',
+      time: '2 jam lalu',
+      isRead: false,
+    ),
+    _NotifData(
+      icon: Icons.local_offer_outlined,
+      color: AppColors.accentOrange,
+      title: 'Promo Akhir Pekan',
+      body: 'Dapatkan diskon 15% untuk pembelian sayuran organik. Berlaku s.d. Minggu!',
+      time: '1 hari lalu',
+      isRead: true,
+    ),
+    _NotifData(
+      icon: Icons.star_outline,
+      color: Colors.amber.shade600,
+      title: 'Beri Ulasan',
+      body: 'Bagaimana pesanan Tomat Segar Anda? Bantu petani dengan ulasan Anda.',
+      time: '3 hari lalu',
+      isRead: true,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundGrey,
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        title: const Text(
+          'Notifikasi',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary),
         ),
-        trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
-        onTap: onTap,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () =>
+                setState(() { for (final n in _notifs) { n.isRead = true; } }),
+            child: const Text(
+              'Tandai Dibaca',
+              style: TextStyle(
+                  color: AppColors.primaryGreen, fontSize: 13),
+            ),
+          ),
+        ],
+      ),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: _notifs.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 8),
+        itemBuilder: (_, i) {
+          final n = _notifs[i];
+          return GestureDetector(
+            onTap: () => setState(() => n.isRead = true),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: n.isRead ? AppColors.white : AppColors.lightGreenBg,
+                borderRadius: BorderRadius.circular(12),
+                border: n.isRead
+                    ? null
+                    : Border.all(
+                        color: AppColors.primaryGreen.withValues(alpha: 0.25)),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: n.color.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(n.icon, color: n.color, size: 20),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                n.title,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: n.isRead
+                                      ? FontWeight.w500
+                                      : FontWeight.w700,
+                                  color: AppColors.textPrimary,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              n.time,
+                              style: const TextStyle(
+                                  fontSize: 11,
+                                  color: AppColors.textSecondary),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          n.body,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppColors.textSecondary,
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (!n.isRead) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      width: 8,
+                      height: 8,
+                      decoration: const BoxDecoration(
+                        color: AppColors.primaryGreen,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _NotifData {
+  final IconData icon;
+  final Color color;
+  final String title;
+  final String body;
+  final String time;
+  bool isRead;
+  _NotifData({
+    required this.icon,
+    required this.color,
+    required this.title,
+    required this.body,
+    required this.time,
+    required this.isRead,
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUYER HELP PAGE
+// ─────────────────────────────────────────────────────────────────────────────
+class BuyerHelpPage extends StatefulWidget {
+  const BuyerHelpPage({super.key});
+
+  @override
+  State<BuyerHelpPage> createState() => _BuyerHelpPageState();
+}
+
+class _BuyerHelpPageState extends State<BuyerHelpPage> {
+  int? _expandedIndex;
+
+  static const _faqs = [
+    _FaqItem(
+      q: 'Bagaimana cara melakukan pemesanan?',
+      a: 'Pilih produk yang Anda inginkan di halaman Toko, masukkan ke keranjang, '
+          'lalu lanjutkan ke halaman Checkout. Pilih alamat dan metode pembayaran, '
+          'kemudian konfirmasi pesanan Anda.',
+    ),
+    _FaqItem(
+      q: 'Berapa lama pengiriman produk?',
+      a: 'Pengiriman biasanya memakan waktu 1–3 hari kerja tergantung lokasi Anda. '
+          'Anda dapat memantau status pesanan secara real-time di menu "Pesanan Saya".',
+    ),
+    _FaqItem(
+      q: 'Apakah bisa membatalkan pesanan?',
+      a: 'Pesanan dapat dibatalkan selama masih dalam status "Menunggu Konfirmasi". '
+          'Setelah pesanan dikonfirmasi oleh penjual, pembatalan tidak dapat dilakukan.',
+    ),
+    _FaqItem(
+      q: 'Bagaimana jika produk yang diterima tidak sesuai?',
+      a: 'Jika ada ketidaksesuaian produk, Anda dapat mengajukan komplain melalui fitur '
+          '"Bantuan" dalam 24 jam setelah produk diterima. Tim kami akan membantu penyelesaian.',
+    ),
+    _FaqItem(
+      q: 'Metode pembayaran apa saja yang tersedia?',
+      a: 'Kami mendukung QRIS, Transfer Bank (BCA, Mandiri, BNI, BRI), '
+          'Kartu Kredit/Debit Visa & Mastercard, serta dompet digital (GoPay, OVO).',
+    ),
+    _FaqItem(
+      q: 'Bagaimana cara menjadi Distributor atau Petani?',
+      a: 'Buka tab "Peran Saya" di halaman Profile, lalu tap "Ajukan Peran" pada '
+          'peran yang Anda inginkan. Tim kami akan memverifikasi pengajuan dalam 1–3 hari kerja.',
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundGrey,
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        title: const Text(
+          'Bantuan & FAQ',
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          // CS contact card
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF2A5C2A), Color(0xFF4A7C3F)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.headset_mic_outlined,
+                    color: Colors.white, size: 36),
+                const SizedBox(width: 14),
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Hubungi Customer Service',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Senin – Jumat, 08.00 – 17.00 WIB',
+                        style: TextStyle(color: Colors.white70, fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppColors.primaryGreenDark,
+                    elevation: 0,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: const Text('Chat',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 13)),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          const Text(
+            'PERTANYAAN UMUM',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textSecondary,
+              letterSpacing: 0.8,
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          ...List.generate(_faqs.length, (i) {
+            final isExpanded = _expandedIndex == i;
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              margin: const EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: isExpanded
+                    ? Border.all(
+                        color: AppColors.primaryGreen.withValues(alpha: 0.3))
+                    : null,
+              ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () => setState(
+                    () => _expandedIndex = isExpanded ? null : i),
+                child: Padding(
+                  padding: const EdgeInsets.all(14),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _faqs[i].q,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: isExpanded
+                                    ? FontWeight.w700
+                                    : FontWeight.w500,
+                                color: isExpanded
+                                    ? AppColors.primaryGreen
+                                    : AppColors.textPrimary,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          AnimatedRotation(
+                            turns: isExpanded ? 0.5 : 0,
+                            duration: const Duration(milliseconds: 200),
+                            child: Icon(
+                              Icons.keyboard_arrow_down,
+                              color: isExpanded
+                                  ? AppColors.primaryGreen
+                                  : AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (isExpanded) ...[
+                        const SizedBox(height: 10),
+                        const Divider(height: 1, color: AppColors.borderColor),
+                        const SizedBox(height: 10),
+                        Text(
+                          _faqs[i].a,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: AppColors.textSecondary,
+                            height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+}
+
+class _FaqItem {
+  final String q;
+  final String a;
+  const _FaqItem({required this.q, required this.a});
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUYER ABOUT PAGE
+// ─────────────────────────────────────────────────────────────────────────────
+class BuyerAboutPage extends StatelessWidget {
+  const BuyerAboutPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundGrey,
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        title: const Text('Tentang CropChain',
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          // Logo card
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF1E4620), Color(0xFF4A7C3F)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Column(
+              children: [
+                Icon(Icons.eco_rounded, color: Colors.white, size: 56),
+                SizedBox(height: 12),
+                Text(
+                  'CropChain',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'Fresh from farm to your table',
+                  style: TextStyle(color: Colors.white70, fontSize: 13),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'v1.0.0',
+                  style: TextStyle(color: Colors.white38, fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          _aboutItem('Versi Aplikasi', '1.0.0 (Build 2026.09)'),
+          _aboutItem('Pengembang', 'Tim CropChain Indonesia'),
+          _aboutItem('Email', 'support@cropchain.id'),
+          _aboutItem('Website', 'www.cropchain.id'),
+        ],
+      ),
+    );
+  }
+
+  Widget _aboutItem(String label, String value) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label,
+              style: const TextStyle(
+                  fontSize: 14, color: AppColors.textSecondary)),
+          Text(value,
+              style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.textPrimary,
+                  fontWeight: FontWeight.w500)),
+        ],
       ),
     );
   }

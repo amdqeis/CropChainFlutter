@@ -20,10 +20,17 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   final _usernameCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   bool _obscurePassword = true;
+
+  late final AnimationController _ctrl;
+
+  // Card fades + slides in: 0 – 80 % of 800ms
+  late final Animation<double> _cardFade;
+  late final Animation<Offset> _cardSlide;
 
   @override
   void initState() {
@@ -32,12 +39,37 @@ class _LoginPageState extends State<LoginPage> {
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
     ));
+
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _cardFade = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _ctrl,
+        curve: const Interval(0.0, 0.80, curve: Curves.easeOut),
+      ),
+    );
+
+    _cardSlide = Tween<Offset>(
+      begin: const Offset(0, 0.06),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _ctrl,
+        curve: const Interval(0.0, 0.85, curve: Curves.easeOutCubic),
+      ),
+    );
+
+    _ctrl.forward();
   }
 
   @override
   void dispose() {
     _usernameCtrl.dispose();
     _passwordCtrl.dispose();
+    _ctrl.dispose();
     super.dispose();
   }
 
@@ -60,20 +92,26 @@ class _LoginPageState extends State<LoginPage> {
             alignment: const Alignment(0.65, 0.0),
           ),
 
-          // Glass card centered
-          SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(24),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 28, vertical: 36),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
+          // Glass card centered — animated entrance
+          AnimatedBuilder(
+            animation: _ctrl,
+            builder: (_, child) => SlideTransition(
+              position: _cardSlide,
+              child: Opacity(opacity: _cardFade.value, child: child),
+            ),
+            child: SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 28),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 28, vertical: 36),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
                           color: Colors.white.withValues(alpha: 0.3),
@@ -173,73 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
 
-                          // ── Demo Mode Section ────────────────────────────
-                          const SizedBox(height: 28),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.08),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                width: 1,
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.developer_mode,
-                                        size: 14,
-                                        color: Colors.white.withValues(alpha: 0.7)),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      'Mode Demo — Pilih Role',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white.withValues(alpha: 0.7),
-                                        fontWeight: FontWeight.w500,
-                                        letterSpacing: 0.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    _DemoRoleButton(
-                                      label: '🛒 Pembeli',
-                                      onTap: () => Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        '/buyer/home',
-                                        (route) => false,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    _DemoRoleButton(
-                                      label: '🏭 Distributor',
-                                      onTap: () => Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        '/distributor/home',
-                                        (route) => false,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    _DemoRoleButton(
-                                      label: '🌾 Petani',
-                                      onTap: () => Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        '/farmer/home',
-                                        (route) => false,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
+
                         ],
                       ),
                     ),
@@ -248,6 +220,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
+          ),  // AnimatedBuilder
         ],
       ),
     );
@@ -312,43 +285,4 @@ class _GlassTextField extends StatelessWidget {
     );
   }
 }
-
-/// Demo role selector button (for mockup testing)
-class _DemoRoleButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onTap;
-
-  const _DemoRoleButton({required this.label, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.25),
-              width: 1,
-            ),
-          ),
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
 

@@ -2084,10 +2084,24 @@ class DistributorProfilePage extends StatelessWidget {
                 onTap: () =>
                     Navigator.pushNamed(context, '/distributor/income')),
             _DistProfileItem(
-                icon: Icons.settings_outlined,
-                label: 'Pengaturan',
-                onTap: () {}),
+                icon: Icons.notifications_outlined,
+                label: 'Notifikasi',
+                onTap: () =>
+                    Navigator.pushNamed(context, '/buyer/notifications')),
+            _DistProfileItem(
+                icon: Icons.help_outline,
+                label: 'Bantuan & FAQ',
+                onTap: () =>
+                    Navigator.pushNamed(context, '/buyer/help')),
             const SizedBox(height: 12),
+            // Switch role section
+            _DistProfileItem(
+              icon: Icons.swap_horiz_rounded,
+              label: 'Beralih ke Mode Pembeli',
+              onTap: () => Navigator.pushNamedAndRemoveUntil(
+                  context, '/buyer/home', (route) => false),
+            ),
+            const SizedBox(height: 4),
             _DistProfileItem(
               icon: Icons.logout,
               label: 'Keluar',
