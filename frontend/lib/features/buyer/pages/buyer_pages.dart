@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/shared_widgets.dart';
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER HOME PAGE
 // Referensi: Screenshot buyer home - Good Morning, Ara | Welcome to CropChain
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerHomePage extends StatefulWidget {
   const BuyerHomePage({super.key});
 
@@ -73,7 +73,7 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
           children: [
             // Greeting
             const Text(
-              'Good Morning, Ara 👋',
+              'Good Morning, Ara ðŸ‘‹',
               style: TextStyle(
                 fontSize: 13,
                 color: AppColors.accentOrange,
@@ -274,9 +274,9 @@ class _ShopNowButton extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // POPULAR PRODUCT CARD (Buyer Home)
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class _PopularProductCard extends StatelessWidget {
   final _ProductData product;
   const _PopularProductCard({required this.product});
@@ -375,10 +375,10 @@ class _ProductData {
   });
 }
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER SEARCH PAGE
 // Referensi: Screenshot search - dengan "Riwayat Pencarian" chips dan "Populer"
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerSearchPage extends StatefulWidget {
   const BuyerSearchPage({super.key});
 
@@ -480,10 +480,10 @@ class _BuyerSearchPageState extends State<BuyerSearchPage> {
   }
 }
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER SHOP / PRODUCT LIST PAGE
 // Referensi: Screenshot product list - grid 2 kolom dengan harga + cart button
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerShopPage extends StatefulWidget {
   const BuyerShopPage({super.key});
 
@@ -624,12 +624,29 @@ class _ProductCard extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER PRODUCT DETAIL PAGE
-// Referensi: Screenshot product detail - hero image, info, distributor, reviews
-// ─────────────────────────────────────────────
-class BuyerProductDetailPage extends StatelessWidget {
+// Figma Frames 10, 12, 13:
+//   - Frame 12: bottom bar = cart icon + "Beli Sekarang" green button
+//   - Frame 13: bottom bar = "â€“ 1 +" orange qty stepper (after add-to-cart)
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+class BuyerProductDetailPage extends StatefulWidget {
   const BuyerProductDetailPage({super.key});
+
+  @override
+  State<BuyerProductDetailPage> createState() => _BuyerProductDetailPageState();
+}
+
+class _BuyerProductDetailPageState extends State<BuyerProductDetailPage> {
+  int _cartQty = 0; // 0 = not in cart, >=1 = in cart
+  int _cartBadge = 0; // total items in cart
+
+  void _addToCart() {
+    setState(() {
+      _cartQty = 1;
+      _cartBadge++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -658,7 +675,7 @@ class BuyerProductDetailPage extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 16),
                 child: CartFab(
                   onTap: () => Navigator.pushNamed(context, '/buyer/cart'),
-                  count: 2,
+                  count: _cartBadge,
                 ),
               ),
             ],
@@ -830,43 +847,110 @@ class BuyerProductDetailPage extends StatelessWidget {
           ),
         ],
       ),
+      // Figma Frame 12 / 13: bottom bar switches between
+      //   "Beli Sekarang" (green) and qty stepper (orange)
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: const BoxDecoration(
           color: Colors.white,
           border: Border(top: BorderSide(color: AppColors.borderColor)),
         ),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.primaryGreen),
-              ),
-              child: const Icon(Icons.shopping_cart_outlined,
-                  color: AppColors.primaryGreen),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: SizedBox(
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/buyer/checkout'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryGreenDark,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+        child: _cartQty == 0
+            // â”€â”€ State 1: Not in cart â†’ cart icon + "Beli Sekarang" â”€â”€
+            ? Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, '/buyer/cart'),
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.primaryGreen),
+                      ),
+                      child: const Icon(Icons.shopping_cart_outlined,
+                          color: AppColors.primaryGreen),
                     ),
                   ),
-                  child: const Text('Beli Sekarang'),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: _addToCart,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryGreenDark,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text('Beli Sekarang'),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            // â”€â”€ State 2: In cart â†’ orange qty stepper â”€â”€
+            : Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.borderColor),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Minus button
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (_cartQty > 1) {
+                            _cartQty--;
+                          } else {
+                            _cartQty = 0;
+                            _cartBadge = (_cartBadge - 1).clamp(0, 99);
+                          }
+                        });
+                      },
+                      child: const SizedBox(
+                        width: 60,
+                        height: 48,
+                        child: Center(
+                          child: Text('â€“',
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.accentOrange)),
+                        ),
+                      ),
+                    ),
+                    // Qty display
+                    Text(
+                      '$_cartQty',
+                      style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary),
+                    ),
+                    // Plus button
+                    GestureDetector(
+                      onTap: () => setState(() => _cartQty++),
+                      child: const SizedBox(
+                        width: 60,
+                        height: 48,
+                        child: Center(
+                          child: Text('+',
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.accentOrange)),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -920,10 +1004,14 @@ class _ReviewItem extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER CART PAGE
-// Referensi: Screenshot 24 - Keranjang dengan checkbox, nama produk, qty stepper orange
-// ─────────────────────────────────────────────
+// Referensi: Figma "iPhone 16 & 17 Pro - 24" (node 58:1803)
+// - AppBar: "Keranjang" bold hijau + alamat kirim kanan
+// - Card items: checkbox di LUAR card (kiri), image+info di dalam card, qty stepper (− box +) di kanan atas
+// - Bottom bar: checkbox "Semua" kiri + Checkout orange pill kanan
+// - Bottom nav pill: Home | Shop | Cart (active underline) | Profile
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerCartPage extends StatefulWidget {
   const BuyerCartPage({super.key});
 
@@ -932,53 +1020,115 @@ class BuyerCartPage extends StatefulWidget {
 }
 
 class _BuyerCartPageState extends State<BuyerCartPage> {
-  // Cart items: [checked, qty]
   final List<_CartItem> _items = [
-    _CartItem(name: 'Beras Premium', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', qty: 4),
-    _CartItem(name: 'Beras Premium', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', qty: 4),
+    _CartItem(
+      name: 'Beras Premium',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      qty: 4,
+      price: 15000,
+    ),
+    _CartItem(
+      name: 'Beras Premium',
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      qty: 4,
+      price: 15000,
+    ),
   ];
-  bool _selectAll = false;
+
+  bool get _allSelected =>
+      _items.isNotEmpty && _items.every((e) => e.checked);
+
+
+  int get _selectedCount {
+    int count = 0;
+    for (final item in _items) {
+      if (item.checked) count += item.qty;
+    }
+    return count;
+  }
+
+  void _toggleAll() {
+    final newVal = !_allSelected;
+    setState(() {
+      for (final item in _items) {
+        item.checked = newVal;
+      }
+    });
+  }
+
+  void _removeItem(int index) => setState(() => _items.removeAt(index));
+
+  // Checkbox widget (orange border + check ketika aktif, sesuai Figma)
+  Widget _buildCheckbox(bool checked, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        width: 20,
+        height: 20,
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: checked ? AppColors.accentOrange : const Color(0xFFBDBDBD),
+            width: 1.5,
+          ),
+          borderRadius: BorderRadius.circular(4),
+          color: Colors.transparent,
+        ),
+        child: checked
+            ? const Icon(Icons.check, size: 13, color: AppColors.accentOrange)
+            : null,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundGrey,
+      backgroundColor: const Color(0xFFF5F5F5),
+      // ── AppBar ────────────────────────────────────────────────────────────────
       appBar: AppBar(
-        backgroundColor: AppColors.white,
+        backgroundColor: Colors.white,
         elevation: 0,
-        titleSpacing: 0,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Keranjang',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-            ),
-          ],
+        automaticallyImplyLeading: false,
+        titleSpacing: 16,
+        title: const Text(
+          'Keranjang',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: AppColors.primaryGreen,
+          ),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 12, top: 8, bottom: 8),
+            padding: const EdgeInsets.only(right: 16, top: 8, bottom: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('Alamat kirim',
-                    style: TextStyle(fontSize: 10, color: AppColors.textSecondary)),
+              children: const [
+                Text(
+                  'Alamat kirim',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: AppColors.textSecondary,
+                  ),
+                ),
                 Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text('Telkom University',
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary)),
-                    Icon(Icons.keyboard_arrow_down,
-                        size: 16, color: AppColors.textSecondary),
+                  children: [
+                    Text(
+                      'Telkom University',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_down,
+                      size: 16,
+                      color: AppColors.textSecondary,
+                    ),
                   ],
                 ),
               ],
@@ -986,219 +1136,342 @@ class _BuyerCartPageState extends State<BuyerCartPage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _items.isEmpty
-                ? const Center(
-                    child: Text('Keranjang kosong',
-                        style: TextStyle(color: AppColors.textSecondary)))
-                : ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 12),
-                    itemCount: _items.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
-                    itemBuilder: (context, i) {
-                      final item = _items[i];
-                      return Container(
-                        color: AppColors.white,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 14),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Checkbox
-                            GestureDetector(
-                              onTap: () => setState(() => item.checked = !item.checked),
-                              child: Container(
-                                width: 20,
-                                height: 20,
-                                margin: const EdgeInsets.only(top: 2),
+      // ── Body ──────────────────────────────────────────────────────────────────
+      body: _items.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.shopping_cart_outlined,
+                      size: 72, color: Colors.grey.shade300),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Keranjang kosong',
+                    style: TextStyle(
+                        fontSize: 16, color: AppColors.textSecondary),
+                  ),
+                  const SizedBox(height: 8),
+                  TextButton(
+                    onPressed: () =>
+                        Navigator.pushNamed(context, '/buyer/shop'),
+                    child: const Text('Mulai Belanja'),
+                  ),
+                ],
+              ),
+            )
+          : ListView.separated(
+              padding: const EdgeInsets.fromLTRB(11, 12, 11, 12),
+              itemCount: _items.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, i) {
+                final item = _items[i];
+                return Dismissible(
+                  key: ValueKey('cart-$i-${item.name}'),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.error,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 20),
+                    child: const Icon(Icons.delete_outline,
+                        color: Colors.white, size: 28),
+                  ),
+                  onDismissed: (_) => _removeItem(i),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // ── Checkbox (kiri card, di luar card — sesuai Figma) ──
+                      _buildCheckbox(
+                        item.checked,
+                        () => setState(() => item.checked = !item.checked),
+                      ),
+                      const SizedBox(width: 8),
+                      // ── Card ──────────────────────────────────────────────
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.06),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Product image placeholder
+                              Container(
+                                width: 88,
+                                height: 99,
                                 decoration: BoxDecoration(
+                                  color: const Color(0xFFF0F0F0),
+                                  borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: item.checked
-                                        ? AppColors.accentOrange
-                                        : AppColors.borderColor,
-                                    width: 1.5,
-                                  ),
-                                  borderRadius: BorderRadius.circular(4),
+                                      color: const Color(0xFFE0E0E0)),
                                 ),
-                                child: item.checked
-                                    ? const Icon(Icons.check,
-                                        size: 14,
-                                        color: AppColors.accentOrange)
-                                    : null,
+                                child: const Icon(Icons.image_outlined,
+                                    color: Color(0xFFBDBDBD), size: 36),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            // Product image
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFEEEEEE),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: AppColors.borderColor),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            // Product info
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
+                              const SizedBox(width: 12),
+                              // Info column
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    // Name row + qty stepper (kanan atas)
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            item.name,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.textPrimary,
+                                            ),
+                                          ),
+                                        ),
+                                        // Qty stepper: − [box] + (sesuai Figma)
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            Text(item.name,
+                                            // Minus
+                                            GestureDetector(
+                                              onTap: () {
+                                                if (item.qty > 1) {
+                                                  setState(() => item.qty--);
+                                                }
+                                              },
+                                              child: const SizedBox(
+                                                width: 20,
+                                                height: 20,
+                                                child: Icon(
+                                                  Icons.remove,
+                                                  size: 14,
+                                                  color:
+                                                      AppColors.accentOrange,
+                                                ),
+                                              ),
+                                            ),
+                                            // Orange qty box
+                                            Container(
+                                              width: 16,
+                                              height: 15,
+                                              decoration: BoxDecoration(
+                                                color: AppColors.accentOrange,
+                                                borderRadius:
+                                                    BorderRadius.circular(3),
+                                              ),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                '${item.qty}',
                                                 style: const TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppColors.textPrimary)),
-                                            const SizedBox(height: 4),
-                                            Text(item.description,
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    fontSize: 11,
-                                                    color: AppColors.textSecondary)),
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                  height: 1,
+                                                ),
+                                              ),
+                                            ),
+                                            // Plus
+                                            GestureDetector(
+                                              onTap: () => setState(
+                                                  () => item.qty++),
+                                              child: const SizedBox(
+                                                width: 20,
+                                                height: 20,
+                                                child: Icon(
+                                                  Icons.add,
+                                                  size: 14,
+                                                  color:
+                                                      AppColors.accentOrange,
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 6),
+                                    // Description
+                                    Text(
+                                      item.description,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: AppColors.textSecondary,
+                                        height: 1.4,
                                       ),
-                                      // Qty stepper — orange
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          _OrangeQtyBtn(
-                                            icon: Icons.remove,
-                                            onTap: () {
-                                              if (item.qty > 1) {
-                                                setState(() => item.qty--);
-                                              }
-                                            },
-                                          ),
-                                          Container(
-                                            width: 28,
-                                            height: 28,
-                                            decoration: BoxDecoration(
-                                              color: AppColors.accentOrange,
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
-                                            ),
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              '${item.qty}',
-                                              style: const TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                          _OrangeQtyBtn(
-                                            icon: Icons.add,
-                                            onTap: () =>
-                                                setState(() => item.qty++),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      );
-                    },
-                  ),
-          ),
-
-          // Bottom bar: checkbox Semua + Checkout orange
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              border: Border(top: BorderSide(color: AppColors.borderColor)),
-            ),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () => setState(() {
-                    _selectAll = !_selectAll;
-                    for (final item in _items) {
-                      item.checked = _selectAll;
-                    }
-                  }),
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: _selectAll
-                            ? AppColors.accentOrange
-                            : AppColors.borderColor,
-                        width: 1.5,
                       ),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: _selectAll
-                        ? const Icon(Icons.check,
-                            size: 14, color: AppColors.accentOrange)
-                        : null,
+                    ],
                   ),
-                ),
-                const SizedBox(width: 8),
-                const Text('Semua',
-                    style:
-                        TextStyle(fontSize: 14, color: AppColors.textPrimary)),
-                const Spacer(),
-                SizedBox(
-                  height: 46,
-                  child: ElevatedButton(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, '/buyer/checkout'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.accentOrange,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30)),
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                    ),
-                    child: const Text(
-                      'Checkout',
-                      style: TextStyle(
+                );
+              },
+            ),
+      // ── Bottom area ────────────────────────────────────────────────────────────
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // ── Checkout bar (sesuai Figma: Semua checkbox kiri + Checkout button kanan)
+          if (_items.isNotEmpty)
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                border: Border(top: BorderSide(color: Color(0xFFE0E0E0))),
+              ),
+              child: Row(
+                children: [
+                  // "Semua" select-all
+                  _buildCheckbox(_allSelected, _toggleAll),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'Semua',
+                    style: TextStyle(
+                        fontSize: 14, color: AppColors.textPrimary),
+                  ),
+                  const Spacer(),
+                  // Checkout orange pill button
+                  SizedBox(
+                    height: 37,
+                    child: ElevatedButton(
+                      onPressed: _selectedCount > 0
+                          ? () => Navigator.pushNamed(
+                              context, '/buyer/checkout')
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.accentOrange,
+                        disabledBackgroundColor:
+                            AppColors.accentOrange.withValues(alpha: 0.4),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 28),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        'Checkout',
+                        style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
+            ),
+          // ── Bottom nav pill ────────────────────────────────────────────────
+          SafeArea(
+            child: Container(
+              height: 61,
+              margin: const EdgeInsets.fromLTRB(13, 0, 13, 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(40),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 12,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _CartNavItem(
+                    icon: Icons.home_outlined,
+                    isActive: false,
+                    onTap: () => Navigator.pushNamedAndRemoveUntil(
+                        context, '/buyer/home', (r) => false),
+                  ),
+                  _CartNavItem(
+                    icon: Icons.store_outlined,
+                    isActive: false,
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/buyer/shop'),
+                  ),
+                  _CartNavItem(
+                    icon: Icons.shopping_cart_outlined,
+                    isActive: true,
+                    onTap: () {},
+                  ),
+                  _CartNavItem(
+                    icon: Icons.person_outline,
+                    isActive: false,
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/buyer/profile'),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: CropChainBottomNav(
-        currentIndex: 2,
-        items: const [
-          BottomNavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
-          BottomNavItem(icon: Icons.store_outlined, activeIcon: Icons.store, label: 'Shop'),
-          BottomNavItem(icon: Icons.shopping_cart_outlined, activeIcon: Icons.shopping_cart, label: 'Cart'),
-          BottomNavItem(icon: Icons.person_outline, activeIcon: Icons.person, label: 'Profile'),
-        ],
-        onTap: (i) {
-          if (i == 0) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/buyer/home', (route) => false);
-          } else if (i == 1) {
-            Navigator.pushNamed(context, '/buyer/shop');
-          } else if (i == 3) {
-            Navigator.pushNamed(context, '/buyer/profile');
-          }
-        },
+    );
+  }
+}
+
+class _CartNavItem extends StatelessWidget {
+  final IconData icon;
+  final bool isActive;
+  final VoidCallback onTap;
+  const _CartNavItem(
+      {required this.icon, required this.isActive, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: 60,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 24,
+              color: isActive
+                  ? AppColors.primaryGreen
+                  : AppColors.textSecondary,
+            ),
+            if (isActive) ...[
+              const SizedBox(height: 4),
+              Container(
+                width: 24,
+                height: 2,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryGreen,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -1207,39 +1480,25 @@ class _BuyerCartPageState extends State<BuyerCartPage> {
 class _CartItem {
   final String name;
   final String description;
+  final int price;
   int qty;
   bool checked;
-  _CartItem(
-      {required this.name,
-      required this.description,
-      this.qty = 1,
-      // ignore: unused_element_parameter
-      this.checked = false});
+  _CartItem({
+    required this.name,
+    required this.description,
+    this.price = 15000,
+    this.qty = 1,
+    this.checked = false,
+  });
 }
 
-class _OrangeQtyBtn extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-  const _OrangeQtyBtn({required this.icon, required this.onTap});
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 28,
-        height: 28,
-        alignment: Alignment.center,
-        child: Icon(icon, size: 18, color: AppColors.accentOrange),
-      ),
-    );
-  }
-}
 
-// ─────────────────────────────────────────────
+
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER CHECKOUT PAGE
 // Referensi: Screenshot 15 - Checkout dengan Qris/BCA VA/Credit Card radio orange
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerCheckoutPage extends StatefulWidget {
   const BuyerCheckoutPage({super.key});
 
@@ -1514,10 +1773,10 @@ class _BuyerCheckoutPageState extends State<BuyerCheckoutPage> {
   }
 }
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER PAYMENT PAGE
-// Referensi: Screenshot 16 — "Menunggu Konfirmasi..." orange + timer + Midtrans area
-// ─────────────────────────────────────────────
+// Referensi: Screenshot 16 â€” "Menunggu Konfirmasi..." orange + timer + Midtrans area
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerPaymentPage extends StatefulWidget {
   const BuyerPaymentPage({super.key});
 
@@ -1526,6 +1785,20 @@ class BuyerPaymentPage extends StatefulWidget {
 }
 
 class _BuyerPaymentPageState extends State<BuyerPaymentPage> {
+  bool _resultShown = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Auto-show payment result after 3 seconds (simulating payment processing)
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted && !_resultShown) {
+        _resultShown = true;
+        _showPaymentResult(context, success: true);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1543,81 +1816,86 @@ class _BuyerPaymentPageState extends State<BuyerPaymentPage> {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: Stack(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Menunggu Konfirmasi header
-              Container(
-                color: AppColors.white,
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          // Menunggu Konfirmasi header
+          Container(
+            color: AppColors.white,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Menunggu Konfirmasi...',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.accentOrange,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text('Total Pembiayaan',
+                        style: TextStyle(
+                            fontSize: 14, color: AppColors.textPrimary)),
+                    Text('75.000',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.textPrimary)),
+                  ],
+                ),
+                const Divider(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Menunggu Konfirmasi...',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.accentOrange,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
+                    const Text('Bayar Dalam',
+                        style: TextStyle(
+                            fontSize: 14, color: AppColors.textPrimary)),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
-                        Text('Total Pembiayaan',
-                            style: TextStyle(
-                                fontSize: 14, color: AppColors.textPrimary)),
-                        Text('75.000',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.textPrimary)),
-                      ],
-                    ),
-                    const Divider(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Bayar Dalam',
-                            style: TextStyle(
-                                fontSize: 14, color: AppColors.textPrimary)),
-                        Row(
-                          children: const [
-                            Icon(Icons.access_time,
-                                size: 14, color: AppColors.accentOrange),
-                            SizedBox(width: 4),
-                            Text(
-                              '25 Menit',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.accentOrange,
-                              ),
-                            ),
-                          ],
+                        Icon(Icons.access_time,
+                            size: 14, color: AppColors.accentOrange),
+                        SizedBox(width: 4),
+                        Text(
+                          '25 Menit',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.accentOrange,
+                          ),
                         ),
                       ],
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 10),
-              // Midtrans payment area placeholder
-              Expanded(
-                child: Container(
-                  color: AppColors.backgroundGrey,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-          // Demo: Tap anywhere to show payment result
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: () => _showPaymentResult(context, success: true),
-              child: const SizedBox.shrink(),
+          const SizedBox(height: 10),
+          // Payment processing area
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: AppColors.accentOrange,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Memproses pembayaran...',
+                      style: TextStyle(
+                          fontSize: 14, color: AppColors.textSecondary)),
+                ],
+              ),
             ),
           ),
         ],
@@ -1652,12 +1930,14 @@ class _BuyerPaymentPageState extends State<BuyerPaymentPage> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      isDismissible: false,
       backgroundColor: Colors.transparent,
       builder: (_) => _PaymentResultSheet(
         success: success,
         onTrack: () {
-          Navigator.pop(context);
-          Navigator.pushNamed(context, '/buyer/order-status');
+          Navigator.pop(context); // close sheet
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/buyer/order-status', (route) => false);
         },
         onHome: () => Navigator.pushNamedAndRemoveUntil(
             context, '/buyer/home', (route) => false),
@@ -1666,7 +1946,7 @@ class _BuyerPaymentPageState extends State<BuyerPaymentPage> {
   }
 }
 
-/// Payment result bottom sheet — reused for success (ss 17) and failed (ss 18)
+/// Payment result bottom sheet â€” reused for success (ss 17) and failed (ss 18)
 class _PaymentResultSheet extends StatelessWidget {
   final bool success;
   final VoidCallback onTrack;
@@ -1767,12 +2047,12 @@ class _PaymentResultSheet extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER PAYMENT SUCCESS PAGE
-// Referensi: Screenshot 17 — navigasi ke /buyer/payment-success (entry point)
+// Referensi: Screenshot 17 â€” navigasi ke /buyer/payment-success (entry point)
 // Sekarang payment result muncul sebagai modal sheet dari BuyerPaymentPage.
 // Page ini redirect ke order-status langsung.
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerPaymentSuccessPage extends StatelessWidget {
   const BuyerPaymentSuccessPage({super.key});
 
@@ -1793,10 +2073,10 @@ class BuyerPaymentSuccessPage extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER ORDER STATUS PAGE
-// Referensi: Screenshot 19-23 — 4 filter tabs (Diproses/Dikirim/Selesai/Dibatalkan)
-// ─────────────────────────────────────────────
+// Referensi: Screenshot 19-23 â€” 4 filter tabs (Diproses/Dikirim/Selesai/Dibatalkan)
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerOrderStatusPage extends StatefulWidget {
   const BuyerOrderStatusPage({super.key});
 
@@ -2114,9 +2394,9 @@ class _OrderCard extends StatelessWidget {
 
 
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER TRACKING PAGE
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerTrackingPage extends StatelessWidget {
   const BuyerTrackingPage({super.key});
 
@@ -2214,10 +2494,10 @@ class BuyerTrackingPage extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER PROFILE PAGE
 // Standard layout + DANA-style pill tabs ONLY for Peran Saya section
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 enum _RoleStatus { active, pending, notApplied }
 
@@ -2302,7 +2582,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
       ),
       body: Column(
         children: [
-          // ── Role pill tabs — always pinned at top ─────────────────────────
+          // â”€â”€ Role pill tabs â€” always pinned at top â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           Container(
             color: AppColors.white,
             padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -2358,7 +2638,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
             ),
           ),
 
-          // ── Body: apply screen OR normal profile ──────────────────────────
+          // â”€â”€ Body: apply screen OR normal profile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
@@ -2414,7 +2694,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
     );
   }
 
-  // ── Apply screen — replaces menu body when role notApplied ────────────────
+  // â”€â”€ Apply screen â€” replaces menu body when role notApplied â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _applyScreen({required Key key}) {
     final label = _roleLabels[_selectedRoleIndex];
     final icon = _roleIcons[_selectedRoleIndex];
@@ -2535,7 +2815,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
                 const SizedBox(width: 8),
                 const Expanded(
                   child: Text(
-                    'Proses verifikasi 1–3 hari kerja oleh tim CropChain.',
+                    'Proses verifikasi 1â€“3 hari kerja oleh tim CropChain.',
                     style: TextStyle(
                         fontSize: 12, color: AppColors.accentOrange),
                   ),
@@ -2586,7 +2866,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
     );
   }
 
-  // ── Normal profile body (active/pending) ──────────────────────────────────
+  // â”€â”€ Normal profile body (active/pending) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   Widget _profileBody({required Key key, required _RoleStatus currentStatus}) {
     final currentKey = _roleKeys[_selectedRoleIndex];
     final isActive = currentStatus == _RoleStatus.active;
@@ -2702,7 +2982,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
             const SizedBox(height: 12),
           ],
 
-          // ── Profile card ───────────────────────────────────────────────────
+          // â”€â”€ Profile card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -2761,7 +3041,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Text(
-                              '🛒 Pembeli',
+                              'ðŸ›’ Pembeli',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
@@ -2797,7 +3077,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
           ),
           const SizedBox(height: 16),
 
-          // ── Transaksi ──────────────────────────────────────────────────────
+          // â”€â”€ Transaksi â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           _ProfileSection(
             label: 'Transaksi',
             children: [
@@ -2811,7 +3091,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
           ),
           const SizedBox(height: 12),
 
-          // ── Pengaturan Akun ────────────────────────────────────────────────
+          // â”€â”€ Pengaturan Akun â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           _ProfileSection(
             label: 'Pengaturan Akun',
             children: [
@@ -2830,7 +3110,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
           ),
           const SizedBox(height: 12),
 
-          // ── Dukungan ──────────────────────────────────────────────────────
+          // â”€â”€ Dukungan â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           _ProfileSection(
             label: 'Dukungan',
             children: [
@@ -2848,7 +3128,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
           ),
           const SizedBox(height: 12),
 
-          // ── Keluar ────────────────────────────────────────────────────────
+          // â”€â”€ Keluar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
           _ProfileSection(
             children: [
               _ProfileMenuItem(
@@ -2964,9 +3244,9 @@ class _ProfileMenuItem extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER ADDRESS PAGE
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerAddressPage extends StatefulWidget {
   const BuyerAddressPage({super.key});
 
@@ -3125,9 +3405,9 @@ class _BuyerAddressPageState extends State<BuyerAddressPage> {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER PAYMENT METHOD PAGE
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerPaymentMethodPage extends StatelessWidget {
   const BuyerPaymentMethodPage({super.key});
 
@@ -3141,13 +3421,13 @@ class BuyerPaymentMethodPage extends StatelessWidget {
     _PayMethodData(
       icon: Icons.account_balance_outlined,
       label: 'BCA Virtual Account',
-      detail: '••• 4521',
+      detail: 'â€¢â€¢â€¢ 4521',
       color: Color(0xFF0D47A1),
     ),
     _PayMethodData(
       icon: Icons.credit_card_outlined,
       label: 'Kartu Kredit / Debit',
-      detail: 'Visa ••• 8890',
+      detail: 'Visa â€¢â€¢â€¢ 8890',
       color: Color(0xFF6A1B9A),
     ),
   ];
@@ -3277,9 +3557,9 @@ class _PayMethodCard extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER NOTIFICATIONS PAGE
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerNotificationsPage extends StatefulWidget {
   const BuyerNotificationsPage({super.key});
 
@@ -3461,9 +3741,9 @@ class _NotifData {
   });
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER HELP PAGE
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerHelpPage extends StatefulWidget {
   const BuyerHelpPage({super.key});
 
@@ -3483,7 +3763,7 @@ class _BuyerHelpPageState extends State<BuyerHelpPage> {
     ),
     _FaqItem(
       q: 'Berapa lama pengiriman produk?',
-      a: 'Pengiriman biasanya memakan waktu 1–3 hari kerja tergantung lokasi Anda. '
+      a: 'Pengiriman biasanya memakan waktu 1â€“3 hari kerja tergantung lokasi Anda. '
           'Anda dapat memantau status pesanan secara real-time di menu "Pesanan Saya".',
     ),
     _FaqItem(
@@ -3504,7 +3784,7 @@ class _BuyerHelpPageState extends State<BuyerHelpPage> {
     _FaqItem(
       q: 'Bagaimana cara menjadi Distributor atau Petani?',
       a: 'Buka tab "Peran Saya" di halaman Profile, lalu tap "Ajukan Peran" pada '
-          'peran yang Anda inginkan. Tim kami akan memverifikasi pengajuan dalam 1–3 hari kerja.',
+          'peran yang Anda inginkan. Tim kami akan memverifikasi pengajuan dalam 1â€“3 hari kerja.',
     ),
   ];
 
@@ -3560,7 +3840,7 @@ class _BuyerHelpPageState extends State<BuyerHelpPage> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        'Senin – Jumat, 08.00 – 17.00 WIB',
+                        'Senin â€“ Jumat, 08.00 â€“ 17.00 WIB',
                         style: TextStyle(color: Colors.white70, fontSize: 12),
                       ),
                     ],
@@ -3679,9 +3959,9 @@ class _FaqItem {
   const _FaqItem({required this.q, required this.a});
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // BUYER ABOUT PAGE
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class BuyerAboutPage extends StatelessWidget {
   const BuyerAboutPage({super.key});
 

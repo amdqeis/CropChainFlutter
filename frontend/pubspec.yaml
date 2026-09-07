@@ -51,6 +51,8 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   build_runner: ^2.4.11
   riverpod_generator: ^2.4.0
+  flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -92,3 +94,33 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# ─────────────────────────────────────────────────────────────────────────────
+# App Icon — flutter_launcher_icons
+# ─────────────────────────────────────────────────────────────────────────────
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/Icon.png"
+  min_sdk_android: 21
+  web:
+    generate: false
+  windows:
+    generate: false
+  macos:
+    generate: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Splash Screen — flutter_native_splash
+# ─────────────────────────────────────────────────────────────────────────────
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/splash_cropchain.png
+  color_dark: "#FFFFFF"
+  image_dark: assets/images/splash_cropchain.png
+  android_12:
+    image: assets/images/Icon.png
+    color: "#FFFFFF"
+    image_dark: assets/images/Icon.png
+    color_dark: "#FFFFFF"
+  web: false

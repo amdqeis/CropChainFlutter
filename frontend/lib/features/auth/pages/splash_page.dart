@@ -1,17 +1,21 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../core/theme/app_theme.dart';
 
 const String _kLogoSvg = 'assets/images/cropchain_logo.svg';
+const String _kLayer1Svg = 'assets/images/Layer_1.svg';
 
 // ─────────────────────────────────────────────────────────────────────────────
-/// SPLASH LOADING PAGE  (Screenshot 2 — white bg + coloured logo)
+/// SPLASH LOADING PAGE  (Figma Frame 2 — white bg + coloured logo)
 ///
-/// Animation flow:
-///   0ms    → logo fades-in + scales up with easeOutBack (slight overshoot)
-///   ~1400ms → brief hold
-///   1600ms → full screen fades out, then navigate
+/// Pixel-accurate to Figma Frame 2 ("iPhone 16 & 17 Pro - 2"):
+///   - Frame: 402 × 874
+///   - Logo node "Layer_1": x=76, y=334, w=250, h=130
+///   - Background: solid white (#FFFFFF)
+///   - Logo centred horizontally, positioned at 38.2 % from top
+///
+/// Uses Layer_1.svg — the official CropChain logo + text SVG from Figma.
 // ─────────────────────────────────────────────────────────────────────────────
 class SplashLoadingPage extends StatefulWidget {
   const SplashLoadingPage({super.key});
@@ -23,17 +27,18 @@ class SplashLoadingPage extends StatefulWidget {
 class _SplashLoadingPageState extends State<SplashLoadingPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
-
-  // Logo fade-in: 0 – 50 %
   late final Animation<double> _fadeIn;
-  // Logo scale: 0 – 55 % (easeOutBack gives a natural bounce)
   late final Animation<double> _scale;
-  // Full-screen fade-out: 78 – 100 %
   late final Animation<double> _fadeOut;
 
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    ));
 
     _ctrl = AnimationController(
       vsync: this,
@@ -47,7 +52,7 @@ class _SplashLoadingPageState extends State<SplashLoadingPage>
       ),
     );
 
-    _scale = Tween<double>(begin: 0.80, end: 1.0).animate(
+    _scale = Tween<double>(begin: 0.85, end: 1.0).animate(
       CurvedAnimation(
         parent: _ctrl,
         curve: const Interval(0.0, 0.55, curve: Curves.easeOutBack),
@@ -74,18 +79,31 @@ class _SplashLoadingPageState extends State<SplashLoadingPage>
 
   @override
   Widget build(BuildContext context) {
+    // Figma: logo at y=334 / 874 = 38.2% from top
+    // Logo center = (334 + 130/2) / 874 = 45.6% from top
+    // Alignment.y: -1 = top, 0 = center, 1 = bottom
+    // offset = (0.456 - 0.5) × 2 = -0.088 ≈ -0.09
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: const Color(0xFFFFFFFF),
       body: AnimatedBuilder(
         animation: _ctrl,
         builder: (_, __) => Opacity(
           opacity: _fadeOut.value,
           child: Center(
-            child: Opacity(
-              opacity: _fadeIn.value,
-              child: Transform.scale(
-                scale: _scale.value,
-                child: SvgPicture.asset(_kLogoSvg, height: 110),
+            child: FractionalTranslation(
+              translation: const Offset(0, -0.09),
+              child: Opacity(
+                opacity: _fadeIn.value,
+                child: Transform.scale(
+                  scale: _scale.value,
+                  // Figma: logo is 250×130 in 402-wide frame (62% of width)
+                  child: SvgPicture.asset(
+                    _kLayer1Svg,
+                    width: 250,
+                    height: 130,
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
             ),
           ),
@@ -95,14 +113,18 @@ class _SplashLoadingPageState extends State<SplashLoadingPage>
   }
 }
 
+
 // ─────────────────────────────────────────────────────────────────────────────
-/// SPLASH / WELCOME PAGE  (Screenshot 1 — farm bg + logo + CTA buttons)
+/// SPLASH / WELCOME PAGE  (Figma Frame 1 — "iPhone 16 & 17 Pro - 1")
 ///
-/// Staggered animation — single 1 400 ms controller, four Interval layers:
-///   0 – 40 %  → background gradient scrim fades in
-///   10 – 62 % → logo fades + floats up (small offset)
-///   28 – 72 % → tagline fades in
-///   48 – 100% → buttons slide up from bottom + fade in
+/// PIXEL-ACCURATE to Figma Frame 1:
+///   - Frame: 402 × 874
+///   - Background: farm photo full-bleed (1565×876, offset x=-808)
+///   - Logo ("Layer_1"): x=78, y=270, w=249, h=130  → 30.9% from top
+///   - "Sign in" button: y=413, w=314 (padded 44 from sides)
+///     - glassmorphic: rgba(255,255,255,0.1), rounded-77, inset shadows
+///     - text: "Sign in", Inter SemiBold 20px, white
+///   - "Create an account": y=488, plain text, Inter SemiBold 20px, white
 // ─────────────────────────────────────────────────────────────────────────────
 class SplashPage extends StatefulWidget {
   final VoidCallback? onSignIn;
@@ -118,10 +140,7 @@ class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
 
-  late final Animation<double> _bgFade;
   late final Animation<double> _logoFade;
-  late final Animation<Offset> _logoSlide;
-  late final Animation<double> _taglineFade;
   late final Animation<double> _btnFade;
   late final Animation<Offset> _btnSlide;
 
@@ -136,54 +155,30 @@ class _SplashPageState extends State<SplashPage>
 
     _ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1400),
-    );
-
-    _bgFade = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _ctrl,
-        curve: const Interval(0.0, 0.40, curve: Curves.easeOut),
-      ),
+      duration: const Duration(milliseconds: 1200),
     );
 
     _logoFade = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _ctrl,
-        curve: const Interval(0.10, 0.62, curve: Curves.easeOut),
-      ),
-    );
-
-    _logoSlide = Tween<Offset>(
-      begin: const Offset(0, 0.10),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _ctrl,
-        curve: const Interval(0.10, 0.65, curve: Curves.easeOutCubic),
-      ),
-    );
-
-    _taglineFade = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _ctrl,
-        curve: const Interval(0.28, 0.72, curve: Curves.easeOut),
+        curve: const Interval(0.0, 0.55, curve: Curves.easeOut),
       ),
     );
 
     _btnFade = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _ctrl,
-        curve: const Interval(0.52, 0.90, curve: Curves.easeOut),
+        curve: const Interval(0.40, 0.85, curve: Curves.easeOut),
       ),
     );
 
     _btnSlide = Tween<Offset>(
-      begin: const Offset(0, 0.28),
+      begin: const Offset(0, 0.15),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
         parent: _ctrl,
-        curve: const Interval(0.48, 1.0, curve: Curves.easeOutCubic),
+        curve: const Interval(0.40, 0.90, curve: Curves.easeOutCubic),
       ),
     );
 
@@ -198,180 +193,147 @@ class _SplashPageState extends State<SplashPage>
 
   @override
   Widget build(BuildContext context) {
+    final screenH = MediaQuery.of(context).size.height;
+    final screenW = MediaQuery.of(context).size.width;
+
+    // Figma positions (frame 402×874):
+    //   Logo: y=270, h=130      → top fraction = 270/874 = 0.309
+    //   Sign in btn: y=413+13=426 (inner rect top) → 0.487 but container y=413 → 0.473
+    //   Create account: y=488   → top fraction = 488/874 = 0.558
+    //   Logo: w=249             → w = screenW * 249/402
+    //   Button: padded 44px from left/right in 402 frame
+
+    final logoTop = screenH * (270 / 874);
+    final logoW = screenW * (249 / 402);
+    final logoH = screenH * (130 / 874);
+    final btnTop = screenH * (413 / 874);
+    final btnH = screenH * (49 / 874);
+    final createTop = screenH * (488 / 874);
+    final sidePadding = screenW * (44 / 402);
+
     return Scaffold(
-      backgroundColor: AppColors.primaryGreenDark,
+      backgroundColor: Colors.black,
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // ── Layer 1: Farm photo background ──────────────────────────────
-          Image.asset('assets/images/login_bg.jpg', fit: BoxFit.cover),
+          // ── Layer 1: Farm photo background (full-bleed) ─────────────────
+          // Figma: image 1565×876, offset x=-808 in 402-wide frame
+          // Visible area starts at x=808 of original → right portion of image
+          Image.asset(
+            'assets/images/login_bg.jpg',
+            fit: BoxFit.cover,
+            alignment: const Alignment(0.3, 0.0),
+          ),
 
-          // ── Layer 2: Gradient scrim — fades in first ─────────────────────
-          AnimatedBuilder(
-            animation: _bgFade,
-            builder: (_, __) => Opacity(
-              opacity: _bgFade.value,
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0x00000000),
-                      Color(0x55000000),
-                      Color(0xCC001A00),
-                    ],
-                    stops: [0.0, 0.45, 1.0],
+          // ── Layer 2: Subtle dark overlay for text readability ───────────
+          Container(color: Colors.black.withValues(alpha: 0.12)),
+
+          // ── Layer 3: Logo (white SVG) — positioned at Figma y=270 ──────
+          Positioned(
+            top: logoTop,
+            left: 0,
+            right: 0,
+            child: AnimatedBuilder(
+              animation: _logoFade,
+              builder: (_, child) => Opacity(
+                opacity: _logoFade.value,
+                child: child,
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  _kLogoSvg,
+                  width: logoW,
+                  height: logoH,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
                   ),
                 ),
               ),
             ),
           ),
 
-          // ── Layer 3: Content ─────────────────────────────────────────────
-          SafeArea(
-            child: Column(
-              children: [
-                // Logo + tagline
-                Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Logo: fade + float up
-                        AnimatedBuilder(
-                          animation: _ctrl,
-                          builder: (_, child) => SlideTransition(
-                            position: _logoSlide,
-                            child: Opacity(
-                              opacity: _logoFade.value,
-                              child: child,
-                            ),
-                          ),
-                          child: SvgPicture.asset(
-                            _kLogoSvg,
-                            height: 130,
-                            colorFilter: const ColorFilter.mode(
-                              Colors.white,
-                              BlendMode.srcIn,
-                            ),
-                          ),
+          // ── Layer 4: "Sign in" glassmorphic button at Figma y=413 ──────
+          Positioned(
+            top: btnTop,
+            left: sidePadding,
+            right: sidePadding,
+            child: AnimatedBuilder(
+              animation: _ctrl,
+              builder: (_, child) => SlideTransition(
+                position: _btnSlide,
+                child: Opacity(opacity: _btnFade.value, child: child),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  if (widget.onSignIn != null) {
+                    widget.onSignIn!();
+                  } else {
+                    Navigator.pushNamed(context, '/login');
+                  }
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(77),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                    child: Container(
+                      height: btnH.clamp(44.0, 56.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(77),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.25),
+                          width: 0.5,
                         ),
-
-                        const SizedBox(height: 14),
-
-                        // Tagline: fades in after logo
-                        AnimatedBuilder(
-                          animation: _taglineFade,
-                          builder: (_, __) => Opacity(
-                            opacity: _taglineFade.value,
-                            child: Text(
-                              'Fresh from farm to your table',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white.withValues(alpha: 0.75),
-                                letterSpacing: 0.4,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        'Sign in',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          letterSpacing: 0.3,
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
+              ),
+            ),
+          ),
 
-                // Buttons: slide up from bottom
-                AnimatedBuilder(
-                  animation: _ctrl,
-                  builder: (_, child) => SlideTransition(
-                    position: _btnSlide,
-                    child: Opacity(opacity: _btnFade.value, child: child),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(32, 0, 32, 52),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          height: 52,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (widget.onSignIn != null) {
-                                widget.onSignIn!();
-                              } else {
-                                Navigator.pushNamed(context, '/login');
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF4A7C3F),
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                            ),
-                            child: const Text(
-                              'Sign in',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        SizedBox(
-                          width: double.infinity,
-                          height: 52,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              if (widget.onCreateAccount != null) {
-                                widget.onCreateAccount!();
-                              } else {
-                                Navigator.pushNamed(context, '/register');
-                              }
-                            },
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              side: const BorderSide(
-                                  color: Colors.white70, width: 1.5),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              backgroundColor:
-                                  Colors.white.withValues(alpha: 0.12),
-                            ),
-                            child: const Text(
-                              'Create an account',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        Text(
-                          'By continuing you agree to our Terms & Privacy Policy',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.white.withValues(alpha: 0.45),
-                          ),
-                        ),
-                      ],
+          // ── Layer 5: "Create an account" plain text at Figma y=488 ─────
+          Positioned(
+            top: createTop,
+            left: 0,
+            right: 0,
+            child: AnimatedBuilder(
+              animation: _ctrl,
+              builder: (_, child) => SlideTransition(
+                position: _btnSlide,
+                child: Opacity(opacity: _btnFade.value, child: child),
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  if (widget.onCreateAccount != null) {
+                    widget.onCreateAccount!();
+                  } else {
+                    Navigator.pushNamed(context, '/register');
+                  }
+                },
+                child: const Center(
+                  child: Text(
+                    'Create an account',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      letterSpacing: 0.3,
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ],
