@@ -73,7 +73,7 @@ class _BuyerHomePageState extends State<BuyerHomePage> {
           children: [
             // Greeting
             const Text(
-              'Good Morning, Ara ðŸ‘‹',
+              'Good Morning, Ara 👋',
               style: TextStyle(
                 fontSize: 13,
                 color: AppColors.accentOrange,
@@ -274,9 +274,9 @@ class _ShopNowButton extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // POPULAR PRODUCT CARD (Buyer Home)
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 class _PopularProductCard extends StatelessWidget {
   final _ProductData product;
   const _PopularProductCard({required this.product});
@@ -375,10 +375,10 @@ class _ProductData {
   });
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER SEARCH PAGE
 // Referensi: Screenshot search - dengan "Riwayat Pencarian" chips dan "Populer"
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerSearchPage extends StatefulWidget {
   const BuyerSearchPage({super.key});
 
@@ -480,10 +480,10 @@ class _BuyerSearchPageState extends State<BuyerSearchPage> {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER SHOP / PRODUCT LIST PAGE
 // Referensi: Screenshot product list - grid 2 kolom dengan harga + cart button
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerShopPage extends StatefulWidget {
   const BuyerShopPage({super.key});
 
@@ -624,12 +624,12 @@ class _ProductCard extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER PRODUCT DETAIL PAGE
 // Figma Frames 10, 12, 13:
 //   - Frame 12: bottom bar = cart icon + "Beli Sekarang" green button
-//   - Frame 13: bottom bar = "â€“ 1 +" orange qty stepper (after add-to-cart)
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+//   - Frame 13: bottom bar = "– 1 +" orange qty stepper (after add-to-cart)
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerProductDetailPage extends StatefulWidget {
   const BuyerProductDetailPage({super.key});
 
@@ -856,7 +856,7 @@ class _BuyerProductDetailPageState extends State<BuyerProductDetailPage> {
           border: Border(top: BorderSide(color: AppColors.borderColor)),
         ),
         child: _cartQty == 0
-            // â”€â”€ State 1: Not in cart â†’ cart icon + "Beli Sekarang" â”€â”€
+            // ── State 1: Not in cart → cart icon + "Beli Sekarang" ──
             ? Row(
                 children: [
                   GestureDetector(
@@ -891,7 +891,7 @@ class _BuyerProductDetailPageState extends State<BuyerProductDetailPage> {
                   ),
                 ],
               )
-            // â”€â”€ State 2: In cart â†’ orange qty stepper â”€â”€
+            // ── State 2: In cart → orange qty stepper ──
             : Container(
                 height: 48,
                 decoration: BoxDecoration(
@@ -917,7 +917,7 @@ class _BuyerProductDetailPageState extends State<BuyerProductDetailPage> {
                         width: 60,
                         height: 48,
                         child: Center(
-                          child: Text('â€“',
+                          child: Text('–',
                               style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
@@ -1495,10 +1495,10 @@ class _CartItem {
 
 
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER CHECKOUT PAGE
 // Referensi: Screenshot 15 - Checkout dengan Qris/BCA VA/Credit Card radio orange
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerCheckoutPage extends StatefulWidget {
   const BuyerCheckoutPage({super.key});
 
@@ -1773,10 +1773,10 @@ class _BuyerCheckoutPageState extends State<BuyerCheckoutPage> {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER PAYMENT PAGE
-// Referensi: Screenshot 16 â€” "Menunggu Konfirmasi..." orange + timer + Midtrans area
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Referensi: Screenshot 16 — "Menunggu Konfirmasi..." orange + timer + Midtrans area
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerPaymentPage extends StatefulWidget {
   const BuyerPaymentPage({super.key});
 
@@ -1946,7 +1946,7 @@ class _BuyerPaymentPageState extends State<BuyerPaymentPage> {
   }
 }
 
-/// Payment result bottom sheet â€” reused for success (ss 17) and failed (ss 18)
+/// Payment result bottom sheet — reused for success (ss 17) and failed (ss 18)
 class _PaymentResultSheet extends StatelessWidget {
   final bool success;
   final VoidCallback onTrack;
@@ -2047,12 +2047,12 @@ class _PaymentResultSheet extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER PAYMENT SUCCESS PAGE
-// Referensi: Screenshot 17 â€” navigasi ke /buyer/payment-success (entry point)
+// Referensi: Screenshot 17 — navigasi ke /buyer/payment-success (entry point)
 // Sekarang payment result muncul sebagai modal sheet dari BuyerPaymentPage.
 // Page ini redirect ke order-status langsung.
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerPaymentSuccessPage extends StatelessWidget {
   const BuyerPaymentSuccessPage({super.key});
 
@@ -2073,10 +2073,10 @@ class BuyerPaymentSuccessPage extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER ORDER STATUS PAGE
-// Referensi: Screenshot 19-23 â€” 4 filter tabs (Diproses/Dikirim/Selesai/Dibatalkan)
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Referensi: Screenshot 19-23 — 4 filter tabs (Diproses/Dikirim/Selesai/Dibatalkan)
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerOrderStatusPage extends StatefulWidget {
   const BuyerOrderStatusPage({super.key});
 
@@ -2394,9 +2394,9 @@ class _OrderCard extends StatelessWidget {
 
 
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER TRACKING PAGE
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerTrackingPage extends StatelessWidget {
   const BuyerTrackingPage({super.key});
 
@@ -2494,10 +2494,10 @@ class BuyerTrackingPage extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ────────────────────────────────────────────────────────────────────────────────────────────────
 // BUYER PROFILE PAGE
 // Standard layout + DANA-style pill tabs ONLY for Peran Saya section
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ────────────────────────────────────────────────────────────────────────────────────────────────
 
 enum _RoleStatus { active, pending, notApplied }
 
@@ -2582,7 +2582,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
       ),
       body: Column(
         children: [
-          // â”€â”€ Role pill tabs â€” always pinned at top â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── Role pill tabs — always pinned at top ──────────────────────────
           Container(
             color: AppColors.white,
             padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -2638,7 +2638,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
             ),
           ),
 
-          // â”€â”€ Body: apply screen OR normal profile â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── Body: apply screen OR normal profile ──────────────────────────
           Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
@@ -2694,7 +2694,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
     );
   }
 
-  // â”€â”€ Apply screen â€” replaces menu body when role notApplied â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Apply screen — replaces menu body when role notApplied ────────────────
   Widget _applyScreen({required Key key}) {
     final label = _roleLabels[_selectedRoleIndex];
     final icon = _roleIcons[_selectedRoleIndex];
@@ -2815,7 +2815,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
                 const SizedBox(width: 8),
                 const Expanded(
                   child: Text(
-                    'Proses verifikasi 1â€“3 hari kerja oleh tim CropChain.',
+                    'Proses verifikasi 1–3 hari kerja oleh tim CropChain.',
                     style: TextStyle(
                         fontSize: 12, color: AppColors.accentOrange),
                   ),
@@ -2866,7 +2866,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
     );
   }
 
-  // â”€â”€ Normal profile body (active/pending) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Normal profile body (active/pending) ──────────────────────────────────
   Widget _profileBody({required Key key, required _RoleStatus currentStatus}) {
     final currentKey = _roleKeys[_selectedRoleIndex];
     final isActive = currentStatus == _RoleStatus.active;
@@ -2982,7 +2982,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
             const SizedBox(height: 12),
           ],
 
-          // â”€â”€ Profile card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── Profile card ──────────────────────────────────────────────────
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -3041,7 +3041,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: const Text(
-                              'ðŸ›’ Pembeli',
+                              '🛒 Pembeli',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
@@ -3077,7 +3077,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
           ),
           const SizedBox(height: 16),
 
-          // â”€â”€ Transaksi â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── Transaksi ─────────────────────────────────────────────────────
           _ProfileSection(
             label: 'Transaksi',
             children: [
@@ -3091,7 +3091,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
           ),
           const SizedBox(height: 12),
 
-          // â”€â”€ Pengaturan Akun â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── Pengaturan Akun ───────────────────────────────────────────────
           _ProfileSection(
             label: 'Pengaturan Akun',
             children: [
@@ -3110,7 +3110,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
           ),
           const SizedBox(height: 12),
 
-          // â”€â”€ Dukungan â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── Dukungan ──────────────────────────────────────────────────────
           _ProfileSection(
             label: 'Dukungan',
             children: [
@@ -3128,7 +3128,7 @@ class _BuyerProfilePageState extends State<BuyerProfilePage>
           ),
           const SizedBox(height: 12),
 
-          // â”€â”€ Keluar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+          // ── Keluar ────────────────────────────────────────────────────────
           _ProfileSection(
             children: [
               _ProfileMenuItem(
@@ -3244,9 +3244,9 @@ class _ProfileMenuItem extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER ADDRESS PAGE
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerAddressPage extends StatefulWidget {
   const BuyerAddressPage({super.key});
 
@@ -3405,9 +3405,9 @@ class _BuyerAddressPageState extends State<BuyerAddressPage> {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER PAYMENT METHOD PAGE
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerPaymentMethodPage extends StatelessWidget {
   const BuyerPaymentMethodPage({super.key});
 
@@ -3421,13 +3421,13 @@ class BuyerPaymentMethodPage extends StatelessWidget {
     _PayMethodData(
       icon: Icons.account_balance_outlined,
       label: 'BCA Virtual Account',
-      detail: 'â€¢â€¢â€¢ 4521',
+      detail: '••• 4521',
       color: Color(0xFF0D47A1),
     ),
     _PayMethodData(
       icon: Icons.credit_card_outlined,
       label: 'Kartu Kredit / Debit',
-      detail: 'Visa â€¢â€¢â€¢ 8890',
+      detail: 'Visa ••• 8890',
       color: Color(0xFF6A1B9A),
     ),
   ];
@@ -3557,9 +3557,9 @@ class _PayMethodCard extends StatelessWidget {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER NOTIFICATIONS PAGE
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerNotificationsPage extends StatefulWidget {
   const BuyerNotificationsPage({super.key});
 
@@ -3741,9 +3741,9 @@ class _NotifData {
   });
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 // BUYER HELP PAGE
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────────────────────
 class BuyerHelpPage extends StatefulWidget {
   const BuyerHelpPage({super.key});
 
@@ -3763,7 +3763,7 @@ class _BuyerHelpPageState extends State<BuyerHelpPage> {
     ),
     _FaqItem(
       q: 'Berapa lama pengiriman produk?',
-      a: 'Pengiriman biasanya memakan waktu 1â€“3 hari kerja tergantung lokasi Anda. '
+      a: 'Pengiriman biasanya memakan waktu 1–3 hari kerja tergantung lokasi Anda. '
           'Anda dapat memantau status pesanan secara real-time di menu "Pesanan Saya".',
     ),
     _FaqItem(
@@ -3784,7 +3784,7 @@ class _BuyerHelpPageState extends State<BuyerHelpPage> {
     _FaqItem(
       q: 'Bagaimana cara menjadi Distributor atau Petani?',
       a: 'Buka tab "Peran Saya" di halaman Profile, lalu tap "Ajukan Peran" pada '
-          'peran yang Anda inginkan. Tim kami akan memverifikasi pengajuan dalam 1â€“3 hari kerja.',
+          'peran yang Anda inginkan. Tim kami akan memverifikasi pengajuan dalam 1–3 hari kerja.',
     ),
   ];
 
@@ -3840,7 +3840,7 @@ class _BuyerHelpPageState extends State<BuyerHelpPage> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        'Senin â€“ Jumat, 08.00 â€“ 17.00 WIB',
+                        'Senin – Jumat, 08.00 – 17.00 WIB',
                         style: TextStyle(color: Colors.white70, fontSize: 12),
                       ),
                     ],
